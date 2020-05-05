@@ -11,11 +11,15 @@ const App = () => {
   const [roomName, setRoomName] = useState('');
   const [formComplete, setFormComplete] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [roomStatus, setRoomStatus] = useState({});
 
 
   useEffect(() => {
-    socket.on('new message', data => {
-      setMessages([...messages, data])
+    socket.on('new_message', data => {
+      setMessages([...messages, data]);
+    });
+    socket.on('room_status', data => {
+      setRoomStatus(data);
     });
   });
 
@@ -37,10 +41,9 @@ const App = () => {
 
   const submitNewMessage = (message) => {
     const msg = `${userName}: ${message}`
-    socket.emit('new message', message);
+    socket.emit('new_message', message);
     setMessages([...messages, msg]);
   }
-
 
   const loginProps = { userName, setUserName, roomName, setRoomName, handleLogin }
   return (
@@ -48,10 +51,9 @@ const App = () => {
     {!formComplete &&
     <Login { ...loginProps } />}
     {formComplete && 
-      <Chat userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
+      <Chat roomStatus={roomStatus} userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
   </div>
   )
-  
 }
 
 export default App;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Chat = ({ messages = [], submitNewMessage, handleLeaveRoom }) =>{
+const Chat = ({ roomStatus = {}, messages = [], submitNewMessage, handleLeaveRoom }) =>{
 
     const [newMessage, setNewMessage] = useState('');
 
@@ -20,7 +20,9 @@ const Chat = ({ messages = [], submitNewMessage, handleLeaveRoom }) =>{
 
     return (
       <div>
-      <ul>{conversation}</ul>
+        <div>Room: {roomStatus.name}</div>
+        <div>Users: {(roomStatus.users || []).map(user => `${user}, `)}</div>
+        <ul>{conversation}</ul>
         <form onSubmit={handleSubmit}>
           <input value={newMessage} onChange={handleChange} /><button type='submit'>Send</button>
         </form>

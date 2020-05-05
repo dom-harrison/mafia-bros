@@ -7,30 +7,49 @@ app.get('/', (req, res) => {
 });
 
 const users = {};
+const rooms = {}
 
 io.on('connection', (socket) => {
     const { id } = socket.client;
     let room;
+    let user;
 
     socket.on('login', ({ userName, roomName }) => {
       socket.join(roomName);
-      io.to(roomName).emit('new message', `${userName} joined room ${roomName}`);
-      users[id] = userName;
+      user = userName
+      users[id] = user;
       room = roomName;
+
+      io.to(roomName).emit('new_message', `${userName} joined room ${roomName}`);
+
+      if (rooms[room]) {
+        rooms[room].users = [...rooms[roomName].users, userName];
+      } else {
+        rooms[room] = {
+          name: room,
+          users: [userName]
+        }
+      }
+
+      io.to(roomName).emit('room_status', rooms[room]);
     });
 
     socket.on('leave_room', ({ userName, roomName }) => {
       socket.leave(roomName);
-      io.to(roomName).emit('new message', `${userName} left room ${roomName}`);
+      io.to(roomName).emit('new_message', `${userName} left room ${roomName}`);
+      rooms[roomName].users = rooms[roomName].users.filter(us => us !== userName);
+      io.to(roomName).emit('room_status', rooms[room]);
     });
 
-    socket.on('new message', (msg) => {
-      socket.broadcast.to(room).emit('new message', `${users[id]}: ${msg}`);
+    socket.on('new_message', (msg) => {
+      socket.broadcast.to(room).emit('new_message', `${users[id]}: ${msg}`);
       console.log(`${id}: ${msg}`);
     });
 
     socket.on('disconnect', () => {
-      io.emit('new message', `${users[id]} disconnected`);
+      rooms[room].users = rooms[room].users.filter(us => us !== user);
+      io.to(room).emit('room_status', rooms[room]);
+      io.emit('new_message', `${users[id]} disconnected`);
       delete users[id];
     });
   });
