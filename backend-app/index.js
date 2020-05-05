@@ -9,23 +9,23 @@ app.get('/', (req, res) => {
 const users = {};
 
 io.on('connection', (socket) => {
-  console.log("Socket id", socket.id);
-    socket.on('join', function({userName, roomName}) {
-      users[socket.client.id] = userName;
-      console.log(userName + ' connected');
-      socket.join(roomName);
-      var room = io.sockets.adapter.rooms[roomName];
-      console.log(room.length + ' users in ' + roomName);
+    const { id } = socket.client;
+
+    socket.on('login', ({ userName, roomName }) => {
+      io.emit('new message', `${userName} joined ${roomName}`);
+      console.log(`${userName} joined ${roomName}`);
+      users[id] = userName;
       console.log(users);
     });
+
     socket.on('new message', (msg) => {
-      const message = `${users[socket.client.id]}: ${msg}`;
-      // socket.broadcast.emit('new message', message);
-      io.emit('new message', message);
-      console.log('msg: ' + message);
+      socket.broadcast.emit('new message', `${users[id]}: ${msg}`);
+      console.log(`${id}: ${msg}`);
     });
     socket.on('disconnect', () => {
-      delete users[socket.id];
+      console.log('Disconnecting: ', id, users[id]);
+      delete users[id];
+      console.log(users);
     });
   });
 

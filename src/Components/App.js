@@ -4,6 +4,7 @@ import Chat from "./Chat";
 import Login from "./Login";
 
 const endpoint = 'http://localhost:3001/'
+const socket = socketIOClient(endpoint);
 
 const App = () => {
   const [userName, setUserName] = useState('');
@@ -13,8 +14,6 @@ const App = () => {
 
 
   useEffect(() => {
-    const socket = socketIOClient(endpoint);
-    console.log('effect!');
     socket.on('new message', data => {
       setMessages([...messages, data])
     });
@@ -23,17 +22,16 @@ const App = () => {
   const handleLogin = (e) =>{
     e.preventDefault()
     if(userName && roomName) {
-      const socket = socketIOClient(endpoint);
       setFormComplete(true);
-      socket.emit('join', { userName, roomName });
+      socket.emit('login', { userName, roomName });
       console.log(socket.id);
     }
   }
 
   const submitNewMessage = (message) => {
-    const socket = socketIOClient(endpoint);
+    const msg = `${userName}: ${message}`
     socket.emit('new message', message);
-    setMessages([...messages, `${userName}: ${message}`]);
+    setMessages([...messages, msg]);
   }
 
 
