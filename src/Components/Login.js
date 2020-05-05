@@ -8,7 +8,7 @@ const Login= (props) => {
         <br/>
         What is your room name? <input value={roomName} onChange={(e) => setRoomName(e.target.value)} />
         <br/>
-        <button type='submit'>Join game!</button>
+        <button type='submit'>Join Room</button>
     </form>
     );
 };

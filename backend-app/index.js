@@ -10,22 +10,28 @@ const users = {};
 
 io.on('connection', (socket) => {
     const { id } = socket.client;
+    let room;
 
     socket.on('login', ({ userName, roomName }) => {
-      io.emit('new message', `${userName} joined ${roomName}`);
-      console.log(`${userName} joined ${roomName}`);
+      socket.join(roomName);
+      io.to(roomName).emit('new message', `${userName} joined room ${roomName}`);
       users[id] = userName;
-      console.log(users);
+      room = roomName;
+    });
+
+    socket.on('leave_room', ({ userName, roomName }) => {
+      socket.leave(roomName);
+      io.to(roomName).emit('new message', `${userName} left room ${roomName}`);
     });
 
     socket.on('new message', (msg) => {
-      socket.broadcast.emit('new message', `${users[id]}: ${msg}`);
+      socket.broadcast.to(room).emit('new message', `${users[id]}: ${msg}`);
       console.log(`${id}: ${msg}`);
     });
+
     socket.on('disconnect', () => {
-      console.log('Disconnecting: ', id, users[id]);
+      io.emit('new message', `${users[id]} disconnected`);
       delete users[id];
-      console.log(users);
     });
   });
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Chat = ({ messages = [], submitNewMessage }) =>{
+const Chat = ({ messages = [], submitNewMessage, handleLeaveRoom }) =>{
 
     const [newMessage, setNewMessage] = useState('');
 
@@ -24,6 +24,7 @@ const Chat = ({ messages = [], submitNewMessage }) =>{
         <form onSubmit={handleSubmit}>
           <input value={newMessage} onChange={handleChange} /><button type='submit'>Send</button>
         </form>
+        <button onClick={handleLeaveRoom}>Leave room</button>
       </div>
     );
 };

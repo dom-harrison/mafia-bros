@@ -28,6 +28,13 @@ const App = () => {
     }
   }
 
+  const handleLeaveRoom = (e) =>{
+    e.preventDefault()
+    socket.emit('leave_room', { userName, roomName });
+    setFormComplete(false);
+    setMessages([]);
+  }
+
   const submitNewMessage = (message) => {
     const msg = `${userName}: ${message}`
     socket.emit('new message', message);
@@ -38,10 +45,10 @@ const App = () => {
   const loginProps = { userName, setUserName, roomName, setRoomName, handleLogin }
   return (
   <div id='app'>
-    <Login { ...loginProps } />
+    {!formComplete &&
+    <Login { ...loginProps } />}
     {formComplete && 
-      <Chat userName={userName} messages={messages} submitNewMessage={submitNewMessage} />
-    }
+      <Chat userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
   </div>
   )
   
