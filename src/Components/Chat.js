@@ -19,14 +19,14 @@ const Chat = ({ roomStatus = {}, messages = [], submitNewMessage, handleLeaveRoo
     ))
 
     return (
-      <div className="chat">
+      <div className="chat section">
         <div>Room: {roomStatus.name}</div>
         <div>Users: {(roomStatus.users || []).map(user => `${user}, `)}</div>
         <ul>{conversation}</ul>
         <form onSubmit={handleSubmit}>
           <input value={newMessage} onChange={handleChange} /><button type='submit'>Send</button>
         </form>
-        <button onClick={handleLeaveRoom}>Leave room</button>
+        <button className="room-button" onClick={handleLeaveRoom}>Leave room</button>
       </div>
     );
 };

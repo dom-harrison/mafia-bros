@@ -37,12 +37,12 @@ body {
   }
 }
 
-.login {
+.section {
   background: dimgrey;
   border: solid 2px gainsboro;
   border-radius: 5px;
   box-sizing: border-box;
-  margin: 30px 15px;
+  margin: 15px 15px;
   padding: 10px;
 
   .field {
@@ -53,16 +53,17 @@ body {
     margin: 3px;
   }
 
-  .join-button {
-    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
-    font-size: 20pt;
-    letter-spacing: 2px;
-    background: darkgoldenrod;
-    color: gainsboro;
-    border: solid 1px gainsboro;
-    border-radius: 5pt;
-    padding: 5px 10px;
-    margin: 10px
-  }
 }
 
+.room-button {
+  font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+  font-size: 20pt;
+  letter-spacing: 2px;
+  background: darkgoldenrod;
+  color: gainsboro;
+  border: solid 1px gainsboro;
+  border-radius: 5pt;
+  padding: 5px 10px;
+  margin: 10px;
+  cursor: pointer
+}
