@@ -20,6 +20,7 @@ body {
 }
 
 .app {
+  height: 100vh;
 
   .app-header {
     width: 100%;
@@ -34,6 +35,46 @@ body {
   .app-body {
     margin: 0 auto;
     max-width: 500px;
+    height: calc(100% - 84px);
+  }
+}
+
+.chat {
+
+  .conversation {
+    padding: 0;
+    display: inline-block;
+    width: 75%;
+  }
+
+  .message { 
+    list-style-type: none; 
+    padding: 5px 10px;
+    text-align: left;
+    
+    &:nth-child(odd) {
+      background: darkgoldenrod; 
+    }
+  }
+
+  .message-input {
+    display: inline-block;
+    width: 75%;
+    height: 25px;
+
+    input {
+      width: 80%;
+      float: left;
+      box-sizing: border-box;
+      height: 100%;
+      margin: 0;
+    }
+
+    .button {
+      height: 100%;
+      width: 20%;
+    }
+
   }
 }
 
