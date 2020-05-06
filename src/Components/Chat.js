@@ -14,8 +14,8 @@ const Chat = ({ roomStatus = {}, messages = [], submitNewMessage, handleLeaveRoo
       setNewMessage(e.target.value);
     }
 
-    const conversation = messages.map(message => (
-      <li>{message}</li>
+    const conversation = messages.map((message, index) => (
+      <li key={index}>{message}</li>
     ))
 
     return (
