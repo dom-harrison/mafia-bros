@@ -15,6 +15,10 @@ const App = () => {
 
 
   useEffect(() => {
+    document.title = 'Mafia Bros'
+  }, []);
+
+  useEffect(() => {
     socket.on('new_message', data => {
       setMessages([...messages, data]);
     });
@@ -45,13 +49,15 @@ const App = () => {
     setMessages([...messages, msg]);
   }
 
-  const loginProps = { userName, setUserName, roomName, setRoomName, handleLogin }
   return (
-  <div id='app'>
+  <div id='app' className="app">
+    <div className="app-header">Mafia Bros</div>
+    <div className="app-body">
     {!formComplete &&
-    <Login { ...loginProps } />}
+    <Login userName={userName} setUserName={setUserName} roomName={roomName} setRoomName={setRoomName} handleLogin={handleLogin} />}
     {formComplete && 
       <Chat roomStatus={roomStatus} userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
+    </div>
   </div>
   )
 }

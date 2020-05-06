@@ -1,14 +1,12 @@
 import React from 'react';
 
-const Login= (props) => {
+const Login = (props) => {
   const {userName, setUserName, roomName, setRoomName, handleLogin } = props;
     return (
-      <form onSubmit={handleLogin}>
-        What is your user name? <input value={userName} onChange={(e) => setUserName(e.target.value)} />
-        <br/>
-        What is your room name? <input value={roomName} onChange={(e) => setRoomName(e.target.value)} />
-        <br/>
-        <button type='submit'>Join Room</button>
+      <form className="login" onSubmit={handleLogin}>
+        <div className="field">User Name<br/><input value={userName} onChange={(e) => setUserName(e.target.value)} /></div>
+        <div className="field">Room<br/><input value={roomName} onChange={(e) => setRoomName(e.target.value)} /></div>
+        <button className="join-button" type='submit'>Join Room</button>
     </form>
     );
 };

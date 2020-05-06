@@ -19,7 +19,7 @@ const Chat = ({ roomStatus = {}, messages = [], submitNewMessage, handleLeaveRoo
     ))
 
     return (
-      <div>
+      <div className="chat">
         <div>Room: {roomStatus.name}</div>
         <div>Users: {(roomStatus.users || []).map(user => `${user}, `)}</div>
         <ul>{conversation}</ul>
