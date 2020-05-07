@@ -20,6 +20,7 @@ body {
 }
 
 .app {
+  height: 100vh;
 
   .app-header {
     width: 100%;
@@ -34,16 +35,18 @@ body {
   .app-body {
     margin: 0 auto;
     max-width: 500px;
+    height: calc(100% - 84px);
   }
 }
 
-.login {
+.section {
   background: dimgrey;
   border: solid 2px gainsboro;
   border-radius: 5px;
   box-sizing: border-box;
-  margin: 30px 15px;
+  margin: 15px 15px;
   padding: 10px;
+  position: relative;
 
   .field {
     margin: 5px
@@ -53,16 +56,64 @@ body {
     margin: 3px;
   }
 
-  .join-button {
-    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
-    font-size: 20pt;
-    letter-spacing: 2px;
-    background: darkgoldenrod;
-    color: gainsboro;
-    border: solid 1px gainsboro;
-    border-radius: 5pt;
+}
+
+.room {
+  height: calc(100% - 30px);
+}
+
+.chat {
+
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  .conversation {
+    padding: 0;
+    display: inline-block;
+    width: 75%;
+  }
+
+  .message { 
+    list-style-type: none; 
     padding: 5px 10px;
-    margin: 10px
+    text-align: left;
+    
+    &:nth-child(odd) {
+      background: darkgoldenrod; 
+    }
+  }
+
+  .message-input {
+    display: inline-block;
+    width: 75%;
+    height: 25px;
+
+    input {
+      width: 80%;
+      float: left;
+      box-sizing: border-box;
+      height: 100%;
+      margin: 0;
+    }
+
+    .button {
+      height: 100%;
+      width: 20%;
+    }
+
   }
 }
 
+.room-button {
+  font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+  font-size: 20pt;
+  letter-spacing: 2px;
+  background: darkgoldenrod;
+  color: gainsboro;
+  border: solid 1px gainsboro;
+  border-radius: 5pt;
+  padding: 5px 10px;
+  margin: 10px;
+  cursor: pointer
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import socketIOClient from "socket.io-client";
-import Chat from "./Chat";
+import Room from "./Room";
 import Login from "./Login";
 
 const endpoint = 'http://localhost:3001/'
@@ -56,7 +56,7 @@ const App = () => {
     {!formComplete &&
     <Login userName={userName} setUserName={setUserName} roomName={roomName} setRoomName={setRoomName} handleLogin={handleLogin} />}
     {formComplete && 
-      <Chat roomStatus={roomStatus} userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
+      <Room roomStatus={roomStatus} userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
     </div>
   </div>
   )
