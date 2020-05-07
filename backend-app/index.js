@@ -37,7 +37,10 @@ io.on('connection', (socket) => {
     socket.on('leave_room', ({ userName, roomName }) => {
       socket.leave(roomName);
       io.to(roomName).emit('new_message', `${userName} left room ${roomName}`);
-      rooms[roomName].users = rooms[roomName].users.filter(us => us !== userName);
+      if (rooms[roomName]) {
+        rooms[roomName].users = rooms[roomName].users.filter(us => us !== userName);
+      }
+      
       io.to(roomName).emit('room_status', rooms[room]);
     });
 
@@ -47,7 +50,10 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-      rooms[room].users = rooms[room].users.filter(us => us !== user);
+      if (rooms[room]) {
+        rooms[room].users = rooms[room].users.filter(us => us !== user);
+      }
+
       io.to(room).emit('room_status', rooms[room]);
       io.emit('new_message', `${users[id]} disconnected`);
       delete users[id];
