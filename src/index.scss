@@ -23,19 +23,24 @@ body {
   height: 100vh;
 
   .app-header {
-    width: 100%;
-    font-family: Corleone, Arial, Helvetica, sans-serif;
-    font-size: 50pt;
-    color: darkgoldenrod;
     background: gainsboro;
-    cursor: default;
     border-radius: 0 0 5px 5px;
+    box-shadow: 0px 2px 5px 0px black;
+    color: darkgoldenrod;
+    cursor: default;
+    font-family: Corleone, Arial, Helvetica, sans-serif;
+    font-size: 45pt;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    
   }
 
   .app-body {
+    height: calc(100% - 75px);
     margin: 0 auto;
     max-width: 500px;
-    height: calc(100% - 84px);
+    padding-top: 75px;
   }
 }
 
@@ -43,6 +48,7 @@ body {
   background: dimgrey;
   border: solid 2px gainsboro;
   border-radius: 5px;
+  box-shadow: 0px 2px 5px 0px black;
   box-sizing: border-box;
   margin: 15px 15px;
   padding: 10px;
@@ -63,10 +69,6 @@ body {
 }
 
 .chat {
-
-  position: absolute;
-  left: 0;
-  bottom: 0;
 
   .conversation {
     padding: 0;

@@ -11,21 +11,18 @@ const App = () => {
   const [roomName, setRoomName] = useState('');
   const [formComplete, setFormComplete] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [roomStatus, setRoomStatus] = useState({});
+  const [room, setRoom] = useState({});
 
 
   useEffect(() => {
     document.title = 'Mafia Bros'
-  }, []);
-
-  useEffect(() => {
     socket.on('new_message', data => {
-      setMessages([...messages, data]);
+      setMessages(m => [...m, data]);
     });
     socket.on('room_status', data => {
-      setRoomStatus(data);
+      setRoom(data);
     });
-  });
+  }, []);
 
   const handleLogin = (e) =>{
     e.preventDefault()
@@ -56,7 +53,7 @@ const App = () => {
     {!formComplete &&
     <Login userName={userName} setUserName={setUserName} roomName={roomName} setRoomName={setRoomName} handleLogin={handleLogin} />}
     {formComplete && 
-      <Room roomStatus={roomStatus} userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
+      <Room room={room} userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
     </div>
   </div>
   )
