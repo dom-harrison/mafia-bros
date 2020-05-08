@@ -7,7 +7,8 @@ app.get('/', (req, res) => {
 });
 
 const users = {};
-const rooms = {}
+const rooms = {};
+
 
 io.on('connection', (socket) => {
     const { id } = socket.client;
@@ -15,19 +16,23 @@ io.on('connection', (socket) => {
     let user;
 
     socket.on('login', ({ userName, roomName }) => {
-      socket.join(roomName);
-      user = userName
-      users[id] = user;
+      users[id] = userName;
       room = roomName;
+      user = {
+        name: userName,
+        role: '',
+        alive: true
+      };
 
+      socket.join(roomName);
       io.to(roomName).emit('new_message', `${userName} joined room ${roomName}`);
 
       if (rooms[room]) {
-        rooms[room].users = [...rooms[roomName].users, userName];
+        rooms[room].users = [...rooms[roomName].users, user];
       } else {
         rooms[room] = {
           name: room,
-          users: [userName]
+          users: [user]
         }
       }
 
