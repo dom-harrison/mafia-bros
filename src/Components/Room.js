@@ -6,7 +6,7 @@ const Room = ({ roomStatus = {}, messages = [], submitNewMessage, handleLeaveRoo
     return (
       <div className="room section">
         <div>Room: {roomStatus.name}</div>
-        <div>Users: {(roomStatus.users || []).map(user => `${user}, `)}</div>
+        <div>Users: {(roomStatus.users || []).join(', ')}</div>
         <Chat messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom}/>
       </div>
     );
