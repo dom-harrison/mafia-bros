@@ -5,7 +5,7 @@ const Login = ({ userName, setUserName, roomName, setRoomName, handleLogin }) =>
       <form className="login section" onSubmit={handleLogin}>
         <div className="field">User Name<br/><input value={userName} onChange={(e) => setUserName(e.target.value)} /></div>
         <div className="field">Room<br/><input value={roomName} onChange={(e) => setRoomName(e.target.value)} /></div>
-        <button className="room-button" type='submit'>Join Room</button>
+        <button className="primary-button" type='submit'>Join Room</button>
     </form>
     );
 };
