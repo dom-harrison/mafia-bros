@@ -24,7 +24,7 @@ const App = () => {
     });
   }, []);
 
-  const handleLogin = (e) =>{
+  const handleLogin = (e) => {
     e.preventDefault()
     if(userName && roomName) {
       setFormComplete(true);
@@ -33,17 +33,15 @@ const App = () => {
     }
   }
 
-  const handleLeaveRoom = (e) =>{
+  const handleLeaveRoom = (e) => {
     e.preventDefault()
-    socket.emit('leave_room', { userName, roomName });
+    socket.emit('leave_room');
     setFormComplete(false);
     setMessages([]);
   }
 
-  const submitNewMessage = (message) => {
-    const msg = `${userName}: ${message}`
-    socket.emit('new_message', message);
-    setMessages([...messages, msg]);
+  const handleStartGame = () => {
+    socket.emit('start_game');
   }
 
   return (
@@ -53,7 +51,7 @@ const App = () => {
     {!formComplete &&
     <Login userName={userName} setUserName={setUserName} roomName={roomName} setRoomName={setRoomName} handleLogin={handleLogin} />}
     {formComplete && 
-      <Room room={room} userName={userName} messages={messages} submitNewMessage={submitNewMessage} handleLeaveRoom={handleLeaveRoom} />}
+      <Room room={room} userName={userName} handleLeaveRoom={handleLeaveRoom} handleStartGame={handleStartGame} />}
     </div>
   </div>
   )
