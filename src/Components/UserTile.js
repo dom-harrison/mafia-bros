@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UserTile = ({ user }) =>{ 
+const UserTile = ({ user }) => { 
     return (
       <div>
         <div>{user.name}</div>
