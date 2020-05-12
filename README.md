@@ -1,13 +1,13 @@
 # Mafia Bros Client App
 Mafia Bros Game
 
-# Running in local
+## Running in local
 ```bash
 npm install
 npm start
 ```
 
-# Containerization
+## Containerization
 
 To build container run:
 ```bash
