@@ -2,8 +2,8 @@ version: '3.7'
 
 services:
 
-  sample:
-    container_name: sample
+  mb-client:
+    container_name: mb-client
     build:
       context: .
       dockerfile: Dockerfile
@@ -11,6 +11,30 @@ services:
       - '.:/app'
       - '/app/node_modules'
     ports:
-      - 3001:3000
+      - 3000:3000
+    expose:
+      - 3000
     environment:
       - CHOKIDAR_USEPOLLING=true
+    tty: true
+    networks:
+      - app-network
+
+  mb-server:
+    container_name: mb-server
+    image: mb-backend:latest
+    ports:
+      - 4000:4000
+    expose:
+        - 4000
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    tty: true
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+      
