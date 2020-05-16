@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import socketIOClient from "socket.io-client";
 import Room from "./Room";
 import Login from "./Login";
-
-const endpoint = 'http://localhost:3001/'
-const socket = socketIOClient(endpoint);
+import { newMessage, roomStatus, emit } from "../api/index";
 
 const App = () => {
   const [userName, setUserName] = useState('');
@@ -13,13 +10,12 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState({});
 
-
   useEffect(() => {
     document.title = 'Mafia Bros'
-    socket.on('new_message', data => {
+    newMessage(data => {
       setMessages(m => [...m, data]);
     });
-    socket.on('room_status', data => {
+    roomStatus(data => {
       setRoom(data);
     });
   }, []);
@@ -28,20 +24,19 @@ const App = () => {
     e.preventDefault()
     if(userName && roomName) {
       setFormComplete(true);
-      socket.emit('login', { userName, roomName });
-      console.log(socket.id);
+      emit('login', { userName, roomName });
     }
   }
 
   const handleLeaveRoom = (e) => {
     e.preventDefault()
-    socket.emit('leave_room');
+    emit('leave_room');
     setFormComplete(false);
     setMessages([]);
   }
 
   const handleStartGame = () => {
-    socket.emit('start_game');
+    emit('start_game');
   }
 
   return (
@@ -51,7 +46,7 @@ const App = () => {
     {!formComplete &&
     <Login userName={userName} setUserName={setUserName} roomName={roomName} setRoomName={setRoomName} handleLogin={handleLogin} />}
     {formComplete && 
-      <Room room={room} userName={userName} handleLeaveRoom={handleLeaveRoom} handleStartGame={handleStartGame} />}
+      <Room room={room} messages={messages} userName={userName} handleLeaveRoom={handleLeaveRoom} handleStartGame={handleStartGame} />}
     </div>
   </div>
   )
