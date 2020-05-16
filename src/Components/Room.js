@@ -5,7 +5,7 @@ import UserTile from "./UserTile";
 const Room = ({ room = {}, handleLeaveRoom, handleStartGame }) =>{
   const { users, dayCount } = room;
   const gameReady = users && users.length > 2;
-  const userTiles = (users || []).map((u, index) => <UserTile user={u} key={index}></UserTile>);
+  const userTiles = (users || []).map((u, index) => <UserTile user={u} key={index} />);
 
   return (
     <div className="room section">
