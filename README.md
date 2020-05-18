@@ -14,6 +14,11 @@ To build container run:
 docker build -t [IMAGE_NAME] .
 ```
 
+To run container run:
+```bash
+docker run -it -d -p 3000:3000 [IMAGE_NAME]
+```
+
 To push to Google Cloud:
 
 -Tag the image 
