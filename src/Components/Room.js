@@ -10,7 +10,7 @@ const Room = ({ room = {}, handleLeaveRoom, handleStartGame }) =>{
   return (
     <div className="room section">
       <div>Room: {room.name}</div>
-      <div>{userTiles}</div>
+      <div className="users">{userTiles}</div>
       {dayCount === 0 && <button className="primary-button" onClick={gameReady ? handleStartGame : undefined}>Start game</button>}
       <button className="primary-button" onClick={handleLeaveRoom}>Leave room</button>
     </div>

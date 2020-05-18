@@ -2,7 +2,7 @@ import React from 'react';
 
 const UserTile = ({ user }) => { 
     return (
-      <div>
+      <div className="user">
         <div>{user.name}</div>
         <div>{user.role}</div>
       </div>
