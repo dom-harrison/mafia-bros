@@ -66,6 +66,18 @@ body {
 
 .room {
   height: calc(100% - 30px);
+
+  .users {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+}
+
+.user {
+  margin: 10px;
+  min-width: 60px;
+  min-height: 60px;
 }
 
 .chat {
