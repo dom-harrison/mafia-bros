@@ -18,7 +18,7 @@ const Login = ({ handleLogin }) => {
       <div className="field">User Name<br/><input value={inputName} onChange={(e) => setInputName(e.target.value)} /></div>
       <div className="field">Room<br/><input value={inputRoom} onChange={(e) => setInputRoom(e.target.value)} /></div>
       <button className="primary-button" type='submit'>Join Room</button>
-  </form>
+    </form>
   );
 };
 

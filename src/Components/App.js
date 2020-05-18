@@ -23,22 +23,22 @@ const App = () => {
 
   useEffect(() => {
     console.log('user update');
-    onRoomUsers(users => {
+    onRoomUsers(updatedUsers => {
       setRoomUsers(currentUsers => {
         if (currentUsers.length === 0) {
-          return users;
-        } else {
-          const updatedUsers = [...currentUsers];
-          users.forEach(user => {
-            const userIx = updatedUsers.findIndex(updatedUser => updatedUser.name === user.name);
-            if (userIx === -1) {
-              updatedUsers.push(user);
-            } else {
-              updatedUsers[userIx] = { ...updatedUsers[userIx], ...user}; 
-            }
-            if (user.name === userName.name) { setUserRole(user.role); }
-          })
           return updatedUsers;
+        } else {
+          const users = [...currentUsers];
+          updatedUsers.forEach(user => {
+            const userIx = users.findIndex(updatedUser => updatedUser.name === user.name);
+            if (userIx === -1) {
+              users.push(user);
+            } else {
+              users[userIx] = { ...users[userIx], ...user}; 
+            }
+            if (user.name === userName && user.role) { setUserRole(user.role); }
+          })
+          return users;
         }
         
       });
@@ -46,13 +46,12 @@ const App = () => {
   }, [userName]);
 
   const handleLogin = (name, roomName) => {
-    setUserName({ name });
-    setFormComplete(true);
     emit('login', { name, roomName });
+    setUserName(name);
+    setFormComplete(true);
   }
 
-  const handleLeaveRoom = (e) => {
-    e.preventDefault()
+  const handleLeaveRoom = () => {
     emit('leave_room');
     setFormComplete(false);
     setMessages([]);
@@ -65,7 +64,8 @@ const App = () => {
   }
 
   const handleAction = (target) => {
-    emit('action', target);
+    console.log("Role:", userRole);
+    emit('action', { target,  role: userRole });
   }
 
   return (
