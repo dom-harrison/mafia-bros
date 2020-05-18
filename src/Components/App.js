@@ -1,31 +1,54 @@
 import React, { useState, useEffect } from "react";
 import Room from "./Room";
 import Login from "./Login";
-import { newMessage, roomStatus, emit } from "../api/index";
+import { onNewMessage, onRoomStatus, onRoomUsers, emit } from "../api/index";
 
 const App = () => {
   const [userName, setUserName] = useState('');
-  const [roomName, setRoomName] = useState('');
+  const [userRole, setUserRole] = useState('');
   const [formComplete, setFormComplete] = useState(false);
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState({});
+  const [roomUsers, setRoomUsers] = useState([]);
 
   useEffect(() => {
     document.title = 'Mafia Bros'
-    newMessage(data => {
+    onNewMessage(data => {
       setMessages(m => [...m, data]);
     });
-    roomStatus(data => {
+    onRoomStatus(data => {
       setRoom(data);
     });
   }, []);
 
-  const handleLogin = (e) => {
-    e.preventDefault()
-    if(userName && roomName) {
-      setFormComplete(true);
-      emit('login', { userName, roomName });
-    }
+  useEffect(() => {
+    console.log('user update');
+    onRoomUsers(users => {
+      setRoomUsers(currentUsers => {
+        if (currentUsers.length === 0) {
+          return users;
+        } else {
+          const updatedUsers = [...currentUsers];
+          users.forEach(user => {
+            const userIx = updatedUsers.findIndex(updatedUser => updatedUser.name === user.name);
+            if (userIx === -1) {
+              updatedUsers.push(user);
+            } else {
+              updatedUsers[userIx] = { ...updatedUsers[userIx], ...user}; 
+            }
+            if (user.name === userName.name) { setUserRole(user.role); }
+          })
+          return updatedUsers;
+        }
+        
+      });
+    });
+  }, [userName]);
+
+  const handleLogin = (name, roomName) => {
+    setUserName({ name });
+    setFormComplete(true);
+    emit('login', { name, roomName });
   }
 
   const handleLeaveRoom = (e) => {
@@ -33,10 +56,16 @@ const App = () => {
     emit('leave_room');
     setFormComplete(false);
     setMessages([]);
+    setRoom({});
+    setRoomUsers([]);
   }
 
   const handleStartGame = () => {
     emit('start_game');
+  }
+
+  const handleAction = (target) => {
+    emit('action', target);
   }
 
   return (
@@ -44,9 +73,17 @@ const App = () => {
     <div className="app-header">Mafia Bros</div>
     <div className="app-body">
     {!formComplete &&
-    <Login userName={userName} setUserName={setUserName} roomName={roomName} setRoomName={setRoomName} handleLogin={handleLogin} />}
+    <Login handleLogin={handleLogin} />}
     {formComplete && 
-      <Room room={room} messages={messages} userName={userName} handleLeaveRoom={handleLeaveRoom} handleStartGame={handleStartGame} />}
+      <Room 
+        userRole={userRole} 
+        room={room} 
+        roomUsers={roomUsers} 
+        messages={messages} 
+        handleLeaveRoom={handleLeaveRoom} 
+        handleStartGame={handleStartGame} 
+        handleAction={handleAction}
+      />}
     </div>
   </div>
   )

@@ -16,7 +16,7 @@ socket.on('connect_error', (error) => {
 })
 
 
-export const newMessage = (cb) => {
+export const onNewMessage = (cb) => {
   // listen for any messages coming through
   // of type 'new_message' and then trigger the
   // callback function with said message
@@ -29,12 +29,19 @@ export const newMessage = (cb) => {
   });
 }
 
-export const roomStatus = (cb) => {
+export const onRoomStatus = (cb) => {
     socket.on("room_status", message => {
       console.log(message);
       cb(message);
     });
-  }
+}
+
+export const onRoomUsers = (cb) => {
+  socket.on("room_users", users => {
+    console.log('roomusers called: ', users);
+    cb(users);
+  });
+}
 
 export const emit = (type, message) => {
     // emit a message of type 'type
