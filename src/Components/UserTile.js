@@ -1,8 +1,8 @@
 import React from 'react';
 
-const UserTile = ({ user }) => { 
+const UserTile = ({ user = {}, handleUserClick }) => { 
     return (
-      <div>
+      <div onClick={() => handleUserClick(user.name)}>
         <div>{user.name}</div>
         <div>{user.role}</div>
       </div>
