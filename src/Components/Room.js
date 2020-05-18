@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import UserTile from "./UserTile";
 
 
-const Room = ({ userRole='', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction }) =>{
+const Room = ({ userRole='', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction }) => {
+
+  const [actionCompleted, setActionCompleted] = useState(false);
+
+  useEffect(() => {
+    setActionCompleted(false);
+  }, [room.nightTime])
 
   const handleUserClick = (target) => {
-    if (userRole !== 'villager') {
+    if (!actionCompleted && (!room.nightTime || userRole !== 'villager')) {
       handleAction(target);
+      setActionCompleted(true);
     }
   }
 

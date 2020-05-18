@@ -30,15 +30,15 @@ export const onNewMessage = (cb) => {
 }
 
 export const onRoomStatus = (cb) => {
-    socket.on("room_status", message => {
-      console.log(message);
-      cb(message);
+    socket.on("room_status", data => {
+      console.log(data);
+      cb(data);
     });
 }
 
 export const onRoomUsers = (cb) => {
   socket.on("room_users", users => {
-    console.log('roomusers called: ', users);
+    console.log(users);
     cb(users);
   });
 }
