@@ -6,6 +6,7 @@ import { onNewMessage, onRoomStatus, onRoomUsers, emit } from "../api/index";
 const App = () => {
   const [userName, setUserName] = useState('');
   const [userRole, setUserRole] = useState('');
+  const [userDead, setUserDead] = useState(false);
   const [formComplete, setFormComplete] = useState(false);
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState({});
@@ -36,7 +37,10 @@ const App = () => {
             } else {
               users[userIx] = { ...users[userIx], ...user}; 
             }
-            if (user.name === userName && user.role) { setUserRole(user.role); }
+            if (user.name === userName) { 
+              setUserRole(r => r || user.role || '');
+              setUserDead(d => d || user.dead || false);
+            }
           })
           return users;
         }
@@ -64,7 +68,6 @@ const App = () => {
   }
 
   const handleAction = (target) => {
-    console.log("Role:", userRole);
     emit('action', { target,  role: userRole });
   }
 
@@ -76,7 +79,9 @@ const App = () => {
     <Login handleLogin={handleLogin} />}
     {formComplete && 
       <Room 
-        userRole={userRole} 
+        userName={userName}
+        userRole={userRole}
+        userDead={userDead}
         room={room} 
         roomUsers={roomUsers} 
         messages={messages} 
