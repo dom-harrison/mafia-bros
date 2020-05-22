@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Room from "./Room";
 import Login from "./Login";
-import { onNewMessage, onRoomStatus, onRoomUsers, emit } from "../api/index";
+import { onNewMessage, onRoomStatus, onRoomUsers, emit, onConnectionError } from "../api/index";
 
 const App = () => {
   const [userName, setUserName] = useState('');
@@ -9,6 +9,7 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState({});
   const [roomUsers, setRoomUsers] = useState([]);
+  const [connectError, setConnectError] = useState(undefined);
 
   useEffect(() => {
     document.title = 'Mafia Bros'
@@ -17,11 +18,8 @@ const App = () => {
     });
     onRoomStatus(data => {
       setRoom(data);
+      setConnectError(false);
     });
-  }, []);
-
-  useEffect(() => {
-    console.log('user update');
     onRoomUsers(updatedUsers => {
       setRoomUsers(currentUsers => {
         if (currentUsers.length === 0) {
@@ -40,7 +38,12 @@ const App = () => {
         }
         
       });
+      setConnectError(false);
     });
+    onConnectionError(res => 
+      setConnectError(res));
+      setRoom({});
+      setRoomUsers([]);
   }, []);
 
   const handleLogin = (name, roomName) => {
@@ -69,9 +72,9 @@ const App = () => {
   <div id='app' className="app">
     <div className="app-header">Mafia Bros</div>
     <div className="app-body">
-    {!formComplete &&
-    <Login handleLogin={handleLogin} />}
-    {formComplete && 
+    {(!formComplete || !!connectError)  &&
+    <Login handleLogin={handleLogin} connectError={connectError} />}
+    {formComplete && !connectError && 
       <Room 
         userName={userName}
         room={room} 

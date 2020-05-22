@@ -7,10 +7,17 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
 
   const [actionCompleted, setActionCompleted] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(undefined);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
 
   useEffect(() => {
-    setUser(roomUsers.find(us => us.name === userName));
+    const userIndex = roomUsers.findIndex(us => us.name === userName);
+    const host = userIndex === 0;
+    setUser(u => (
+      {
+      ...u,
+      ...roomUsers[userIndex],
+      host
+    }));
   }, [roomUsers, userName])
 
   useEffect(() => {
@@ -19,8 +26,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   }, [nightTime])
 
   const handleUserClick = (target, index) => {
-    console.log(target, index);
-    if (!gameOver && !actionCompleted && !user.dead && (user.role !== 'villager' || !nightTime)) {
+    if (dayCount > 0 && !gameOver && !actionCompleted && !user.dead && (user.role !== 'villager' || !nightTime)) {
       handleAction(target, user.role);
       setActionCompleted(true);
       setSelectedIndex(index);
@@ -32,7 +38,9 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   const voteTracker = nightTime || dayCount === 0 ? undefined : `Votes in: ${voteCount}/${aliveCount}`;
 
   const instruction = () => {
-    if (nightTime) {
+    if (dayCount > 0 && user.dead) {
+      return 'You are dead!';
+    } else if (nightTime) {
       if (actionCompleted) { return 'Go to sleep'};
       switch (user.role) {
         case 'mafia':
@@ -61,7 +69,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       {dayCount > 0 && !gameOver? <div>{instruction()}</div> : undefined}
       <div className="users">{userTiles}</div>
       <div>{message}</div>
-      {dayCount === 0 && <button className="primary-button" onClick={gameReady ? handleStartGame : undefined}>Start game</button>}
+      {dayCount === 0 && user.host && <button className="primary-button" onClick={gameReady ? handleStartGame : undefined}>Start game</button>}
       <button className="primary-button" onClick={handleLeaveRoom}>Leave village</button>
     </div>
   );
