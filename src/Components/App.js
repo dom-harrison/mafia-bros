@@ -5,8 +5,6 @@ import { onNewMessage, onRoomStatus, onRoomUsers, emit } from "../api/index";
 
 const App = () => {
   const [userName, setUserName] = useState('');
-  const [userRole, setUserRole] = useState('');
-  const [userDead, setUserDead] = useState(false);
   const [formComplete, setFormComplete] = useState(false);
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState({});
@@ -37,17 +35,13 @@ const App = () => {
             } else {
               users[userIx] = { ...users[userIx], ...user}; 
             }
-            if (user.name === userName) { 
-              setUserRole(r => r || user.role || '');
-              setUserDead(d => d || user.dead || false);
-            }
           })
           return users;
         }
         
       });
     });
-  }, [userName]);
+  }, []);
 
   const handleLogin = (name, roomName) => {
     emit('login', { name, roomName });
@@ -67,8 +61,8 @@ const App = () => {
     emit('start_game');
   }
 
-  const handleAction = (target) => {
-    emit('action', { target,  role: userRole });
+  const handleAction = (target, role) => {
+    emit('action', { target,  role });
   }
 
   return (
@@ -80,8 +74,6 @@ const App = () => {
     {formComplete && 
       <Room 
         userName={userName}
-        userRole={userRole}
-        userDead={userDead}
         room={room} 
         roomUsers={roomUsers} 
         messages={messages} 
