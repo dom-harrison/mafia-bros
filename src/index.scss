@@ -72,12 +72,52 @@ body {
     flex-wrap: wrap;
     margin-top: 10px;
   }
+
+  &.night{
+    background: #1e2029;
+  }
 }
 
 .user {
   margin: 10px;
   min-width: 60px;
   min-height: 60px;
+
+  &.selected {
+    background: darkgoldenrod;
+  }
+
+  .card {
+    background: white;
+    border: solid 2px gainsboro;
+    border-radius: 5pt;
+    color: darkslategrey;
+    display: inline-block;
+    font-size: 8pt;
+    height: 50px;
+    margin: 0 auto;
+    vertical-align: middle;
+    width: 50px;
+
+    &.unknown {
+      background: indianred;
+      color: gainsboro;
+    }
+
+    &.dead {
+      background: dimgray;
+      color: gainsboro;
+    }
+
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+  }
+  
+  
 }
 
 .chat {

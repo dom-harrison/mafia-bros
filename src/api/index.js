@@ -5,6 +5,7 @@ const endpoint = `${hostName}:4000`;
 // const endpoint = 'mb-server:4000'
 const socket = socketIOClient(endpoint);
 
+
 socket.on('error', error => {
   console.log(error)
 })
@@ -15,14 +16,13 @@ socket.on('connect_error', (error) => {
   console.log(error)
 })
 
-
 export const onNewMessage = (cb) => {
   // listen for any messages coming through
   // of type 'new_message' and then trigger the
   // callback function with said message
   socket.on("new_message", message => {
     // console.log the message for posterity
-    console.log(message);
+    // console.log(message);
     // trigger the callback passed in when
     // our App component calls connect
     cb(message);
@@ -31,14 +31,14 @@ export const onNewMessage = (cb) => {
 
 export const onRoomStatus = (cb) => {
     socket.on("room_status", data => {
-      console.log(data);
+      // console.log(data);
       cb(data);
     });
 }
 
 export const onRoomUsers = (cb) => {
   socket.on("room_users", users => {
-    console.log(users);
+    // console.log(users);
     cb(users);
   });
 }
@@ -46,4 +46,13 @@ export const onRoomUsers = (cb) => {
 export const emit = (type, message) => {
     // emit a message of type 'type
     socket.emit(type, message);
+}
+
+export const onConnectionError = (cb) => {
+  socket.on('error', error => {
+    cb(error);
+  })
+  socket.on('connect_error', error => {
+    cb(error);
+  })
 }

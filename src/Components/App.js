@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Room from "./Room";
 import Login from "./Login";
-import { onNewMessage, onRoomStatus, onRoomUsers, emit } from "../api/index";
+import { onNewMessage, onRoomStatus, onRoomUsers, emit, onConnectionError } from "../api/index";
 
 const App = () => {
   const [userName, setUserName] = useState('');
-  const [userRole, setUserRole] = useState('');
   const [formComplete, setFormComplete] = useState(false);
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState({});
   const [roomUsers, setRoomUsers] = useState([]);
+  const [connectError, setConnectError] = useState(undefined);
 
   useEffect(() => {
     document.title = 'Mafia Bros'
@@ -18,11 +18,8 @@ const App = () => {
     });
     onRoomStatus(data => {
       setRoom(data);
+      setConnectError(false);
     });
-  }, []);
-
-  useEffect(() => {
-    console.log('user update');
     onRoomUsers(updatedUsers => {
       setRoomUsers(currentUsers => {
         if (currentUsers.length === 0) {
@@ -36,14 +33,18 @@ const App = () => {
             } else {
               users[userIx] = { ...users[userIx], ...user}; 
             }
-            if (user.name === userName && user.role) { setUserRole(user.role); }
           })
           return users;
         }
         
       });
+      setConnectError(false);
     });
-  }, [userName]);
+    onConnectionError(res => 
+      setConnectError(res));
+      setRoom({});
+      setRoomUsers([]);
+  }, []);
 
   const handleLogin = (name, roomName) => {
     emit('login', { name, roomName });
@@ -63,20 +64,19 @@ const App = () => {
     emit('start_game');
   }
 
-  const handleAction = (target) => {
-    console.log("Role:", userRole);
-    emit('action', { target,  role: userRole });
+  const handleAction = (target, role) => {
+    emit('action', { target,  role });
   }
 
   return (
   <div id='app' className="app">
     <div className="app-header">Mafia Bros</div>
     <div className="app-body">
-    {!formComplete &&
-    <Login handleLogin={handleLogin} />}
-    {formComplete && 
+    {(!formComplete || !!connectError)  &&
+    <Login handleLogin={handleLogin} connectError={connectError} />}
+    {formComplete && !connectError && 
       <Room 
-        userRole={userRole} 
+        userName={userName}
         room={room} 
         roomUsers={roomUsers} 
         messages={messages} 
