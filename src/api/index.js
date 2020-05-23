@@ -38,7 +38,7 @@ export const onRoomStatus = (cb) => {
 
 export const onRoomUsers = (cb) => {
   socket.on("room_users", users => {
-    // console.log(users);
+    console.log(users);
     cb(users);
   });
 }
