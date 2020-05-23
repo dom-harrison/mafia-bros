@@ -26,12 +26,14 @@ const App = () => {
           return updatedUsers;
         } else {
           const users = [...currentUsers];
-          updatedUsers.forEach(user => {
-            const userIx = users.findIndex(updatedUser => updatedUser.name === user.name);
+          updatedUsers.forEach(updatedUser => {
+            const userIx = users.findIndex(us => us.name === updatedUser.name);
             if (userIx === -1) {
-              users.push(user);
+              users.push(updatedUser);
+            } else if (updatedUser.remove) {
+              users.splice(userIx, 1);
             } else {
-              users[userIx] = { ...users[userIx], ...user}; 
+              users[userIx] = { ...users[userIx], ...updatedUser}; 
             }
           })
           return users;
@@ -40,13 +42,16 @@ const App = () => {
       });
       setConnectError(false);
     });
-    onConnectionError(res => 
-      setConnectError(res));
+    onConnectionError(res => {
+      setConnectError(res);
       setRoom({});
       setRoomUsers([]);
+    })
   }, []);
 
   const handleLogin = (name, roomName) => {
+    setRoom({});
+    setRoomUsers([]);
     emit('login', { name, roomName });
     setUserName(name);
     setFormComplete(true);
@@ -55,7 +60,6 @@ const App = () => {
   const handleLeaveRoom = () => {
     emit('leave_room');
     setFormComplete(false);
-    setMessages([]);
     setRoom({});
     setRoomUsers([]);
   }
