@@ -1,7 +1,8 @@
 import socketIOClient from "socket.io-client";
 
-const hostName = window.location.hostname;
-const endpoint = `${hostName}:4000`;
+const clientHost = window.location.hostname;
+const serverHost = clientHost.replace('client', 'server');
+const endpoint = `${serverHost}:4000`;
 // const endpoint = 'mb-server:4000'
 const socket = socketIOClient(endpoint);
 

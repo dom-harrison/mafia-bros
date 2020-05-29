@@ -67,6 +67,12 @@ body {
 .room {
   height: calc(100% - 30px);
 
+  .title{
+    color: gainsboro;
+    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+    font-size: 25pt;
+  }
+
   .users {
     display: flex;
     flex-wrap: wrap;
@@ -79,12 +85,32 @@ body {
 }
 
 .user {
-  margin: 10px;
+  border-radius: 5px;
+  margin: 5px;
   min-width: 60px;
   min-height: 60px;
+  padding: 5px;
 
   &.selected {
     background: darkgoldenrod;
+  }
+
+  &.you {
+    .card {
+      border-color: darkgoldenrod
+    }
+    .user-text {
+      color: darkgoldenrod
+    }
+
+    &.selected {
+      .card {
+        border-color: darkslategrey
+      }
+      .user-text {
+        color: darkslategrey
+      }
+    }
   }
 
   .card {
@@ -109,12 +135,32 @@ body {
       color: gainsboro;
     }
 
+    &.policeman, &.doctor{
+      color: indianred;
+    }
+
+    &.dead {
+      background: dimgray;
+      color: gainsboro;
+    }
+
     span {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100%;
+      height: calc(100%/3);
+
+      &.top {
+        justify-content: flex-start;
+        padding-left: 5px;
+      }
+
+      &.bottom {
+        justify-content: flex-end;
+        padding-right: 5px;
+      } 
     }
+    
   }
   
   
@@ -169,5 +215,10 @@ body {
   border-radius: 5pt;
   padding: 5px 10px;
   margin: 10px;
-  cursor: pointer
+  cursor: pointer;
+  
+  &.deactivated{
+    background: dimgrey;
+    cursor: default; 
+  }
 }

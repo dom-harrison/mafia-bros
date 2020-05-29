@@ -6,7 +6,9 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   const { name, dayCount, voteCount, nightTime, aliveCount, message, gameOver } = room;
 
   const [actionCompleted, setActionCompleted] = useState(false);
+  const [previousTarget, setPreviousTarget] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(undefined);
+  const [userMessage, setUserMessage] = useState('');
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -18,6 +20,11 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       ...roomUsers[userIndex],
       host
     }));
+    if (roomUsers && roomUsers.length < 4) { 
+      setUserMessage(`Need ${4 - roomUsers.length} more players`)
+    } else {
+      setUserMessage('');
+    }
   }, [roomUsers, userName])
 
   useEffect(() => {
@@ -27,15 +34,23 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
 
   const handleUserClick = (target, index) => {
     if (dayCount > 0 && !gameOver && !actionCompleted && !user.dead && (user.role !== 'villager' || !nightTime)) {
-      handleAction(target, user.role);
-      setActionCompleted(true);
-      setSelectedIndex(index);
+      if (nightTime && user.role === 'doctor' && target === previousTarget) {
+        setUserMessage('Can\'t save the same person two nights in row!')
+      } else {
+        setUserMessage('');
+        handleAction(target, user.role);
+        setActionCompleted(true);
+        setSelectedIndex(index);
+        if (nightTime && user.role === 'doctor' ) {
+          setPreviousTarget(target);
+        }
+      }
     }
   }
-
+  
   const gameReady = roomUsers && roomUsers.length > 2;
-  const gamePostion = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : 'Pregame';
-  const voteTracker = nightTime || dayCount === 0 ? undefined : `Votes in: ${voteCount}/${aliveCount}`;
+  const gamePostion = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : '';
+  const voteTracker = nightTime || dayCount === 0 ? undefined : ` - Votes in: ${voteCount}/${aliveCount}`;
 
   const instruction = () => {
     if (dayCount > 0 && user.dead) {
@@ -53,23 +68,34 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
           return 'Go to sleep';
       }
     } else {
-      if (actionCompleted) { return undefined};
-      return 'Vote for who you want to be lynched';
+      if (actionCompleted) { return ''};
+      return 'Vote for who you want to lynch';
     }
   }
 
-  const userTiles = (roomUsers || []).map((u, index) => <UserTile user={u} index={index} selected={selectedIndex === index} handleUserClick={handleUserClick}  key={u.name} />);
+  const userTiles = (roomUsers || []).map((u, index) => 
+    <UserTile 
+      user={u} 
+      index={index} 
+      selected={selectedIndex === index} 
+      handleUserClick={handleUserClick}
+      you={user && user.name === u.name}
+      key={u.name} 
+    />
+  );
 
   return (
     <div className={`room section ${nightTime ? 'night' : 'day'}`}>
-      <div>Village: {name}</div>
-      <div>{gamePostion}</div>
-      <div>{`You: ${userName}`}</div>
-      {voteTracker && !gameOver && <div>{voteTracker}</div>}
-      {dayCount > 0 && !gameOver? <div>{instruction()}</div> : undefined}
+      <div className="title">{gamePostion ? gamePostion : `Welcome to ${name}`}</div>
+      {dayCount > 0 && !gameOver? <div>{`${instruction()} ${voteTracker ? voteTracker : ''}`}</div> : undefined}
       <div className="users">{userTiles}</div>
-      <div>{message}</div>
-      {dayCount === 0 && user.host && <button className="primary-button" onClick={gameReady ? handleStartGame : undefined}>Start game</button>}
+      <div>{userMessage || message}</div>
+      {dayCount === 0 && user.host && 
+        <button 
+          className={`primary-button ${gameReady ? '' : 'deactivated'}`} 
+          onClick={gameReady ? handleStartGame : undefined}>Start game
+        </button>
+      }
       <button className="primary-button" onClick={handleLeaveRoom}>Leave village</button>
     </div>
   );
