@@ -7,7 +7,7 @@ if (clientHost.includes('client')){
   endpoint = clientHost.replace('client', 'server');
 }
 
-const socket = socketIOClient(endpoint, {transports: ['websocket']});
+const socket = socketIOClient(`http://${endpoint}`, {transports: ['websocket', 'polling']});
 
 socket.on('error', error => {
   console.log(error)
