@@ -1,11 +1,13 @@
 import socketIOClient from "socket.io-client";
 
 const clientHost = window.location.hostname;
-const serverHost = clientHost.replace('client', 'server');
-const endpoint = `${serverHost}:4000`;
-// const endpoint = 'mb-server:4000'
-const socket = socketIOClient(endpoint);
+let endpoint = `${clientHost}:4000`
 
+if (clientHost.includes('client')){
+  endpoint = clientHost.replace('client', 'server');
+}
+
+const socket = socketIOClient(endpoint);
 
 socket.on('error', error => {
   console.log(error)
