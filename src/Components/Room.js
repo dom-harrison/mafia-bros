@@ -48,7 +48,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
     }
   }
   
-  const gameReady = roomUsers && roomUsers.length > 2;
+  const gameReady = roomUsers && roomUsers.length > 3;
   const gamePostion = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : '';
   const voteTracker = nightTime || dayCount === 0 ? undefined : ` - Votes in: ${voteCount}/${aliveCount}`;
 
