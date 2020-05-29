@@ -50,7 +50,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   
   const gameReady = roomUsers && roomUsers.length > 3;
   const gamePostion = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : '';
-  const voteTracker = nightTime || dayCount === 0 ? undefined : ` - Votes in: ${voteCount}/${aliveCount}`;
+  const voteTracker = nightTime || dayCount === 0 ? undefined : `[${voteCount}/${aliveCount}]`;
 
   const instruction = () => {
     if (dayCount > 0 && user.dead) {

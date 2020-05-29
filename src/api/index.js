@@ -7,7 +7,7 @@ if (clientHost.includes('client')){
   endpoint = clientHost.replace('client', 'server');
 }
 
-const socket = socketIOClient(endpoint);
+const socket = socketIOClient(endpoint, {transports: ['websocket']});
 
 socket.on('error', error => {
   console.log(error)
@@ -41,7 +41,7 @@ export const onRoomStatus = (cb) => {
 
 export const onRoomUsers = (cb) => {
   socket.on("room_users", users => {
-    console.log(users);
+    // console.log(users);
     cb(users);
   });
 }
