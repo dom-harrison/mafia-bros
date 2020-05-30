@@ -3,7 +3,7 @@ import UserTile from "./UserTile";
 
 
 const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction }) => {
-  const { name, dayCount, voteCount, nightTime, aliveCount, message, gameOver } = room;
+  const { name, dayCount, nightTime, aliveCount, message, votes, revote, gameOver } = room;
 
   const [actionCompleted, setActionCompleted] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(undefined);
@@ -23,7 +23,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   useEffect(() => {
     setActionCompleted(false);
     setSelectedIndex(undefined);
-  }, [nightTime])
+  }, [nightTime, revote])
 
   const handleUserClick = (target, index) => {
     if (dayCount > 0 && !gameOver && !actionCompleted && !user.dead && (user.role !== 'villager' || !nightTime)) {
@@ -35,6 +35,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
 
   const gameReady = roomUsers && roomUsers.length > 2;
   const gamePostion = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : 'Pregame';
+  const voteCount = votes ? Object.values(votes).reduce((a, b) => a + b, 0) : 0;
   const voteTracker = nightTime || dayCount === 0 ? undefined : `Votes in: ${voteCount}/${aliveCount}`;
 
   const instruction = () => {
