@@ -20,13 +20,19 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
     }));
   }, [roomUsers, userName])
 
+  const revoteCount = revote ? revote.count : 0;
   useEffect(() => {
     setActionCompleted(false);
     setSelectedIndex(undefined);
-  }, [nightTime, revote])
+  }, [nightTime, revoteCount])
 
   const handleUserClick = (target, index) => {
-    if (dayCount > 0 && !gameOver && !actionCompleted && !user.dead && (user.role !== 'villager' || !nightTime)) {
+    if (dayCount > 0 && 
+      !gameOver && 
+      !actionCompleted && 
+      !user.dead && 
+      (user.role !== 'villager' || !nightTime) && 
+      (revote.users.length === 0 || revote.users.includes(target))) {
       handleAction(target, user.role);
       setActionCompleted(true);
       setSelectedIndex(index);
