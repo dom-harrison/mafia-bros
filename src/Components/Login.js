@@ -6,7 +6,7 @@ const Login = ({ handleLogin, connectError }) => {
   const [inputRoom, setInputRoom] = useState('');
 
   const handleInput = (e, field) => {
-    const input = e.target.value.substr(0, 10);
+    const input = e.target.value.substr(0, 12);
     if (field === 'name') {
       setInputName(input);
     } else {

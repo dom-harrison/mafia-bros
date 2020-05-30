@@ -3,7 +3,7 @@ import UserTile from "./UserTile";
 
 
 const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction }) => {
-  const { name, dayCount, voteCount, nightTime, aliveCount, message, gameOver } = room;
+  const { name, dayCount, nightTime, aliveCount, message, votes, revote, gameOver } = room;
 
   const [actionCompleted, setActionCompleted] = useState(false);
   const [previousTarget, setPreviousTarget] = useState('');
@@ -27,29 +27,35 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
     }
   }, [roomUsers, userName])
 
+  const revoteCount = revote ? revote.count : 0;
   useEffect(() => {
     setActionCompleted(false);
     setSelectedIndex(undefined);
-  }, [nightTime])
+  }, [nightTime, revoteCount])
 
   const handleUserClick = (target, index) => {
-    if (dayCount > 0 && !gameOver && !actionCompleted && !user.dead && (user.role !== 'villager' || !nightTime)) {
+    if (dayCount > 0 && 
+      !gameOver && 
+      !actionCompleted && 
+      !user.dead && 
+      (user.role !== 'villager' || !nightTime) && 
+      (revote.users.length === 0 || revote.users.includes(target))) {
       if (nightTime && user.role === 'doctor' && target === previousTarget) {
         setUserMessage('Can\'t save the same person two nights in row!')
       } else {
-        setUserMessage('');
-        handleAction(target, user.role);
-        setActionCompleted(true);
-        setSelectedIndex(index);
-        if (nightTime && user.role === 'doctor' ) {
-          setPreviousTarget(target);
-        }
+      handleAction(target, user.role);
+      setActionCompleted(true);
+      setSelectedIndex(index);
+      }
+      if (nightTime && user.role === 'doctor' ) {
+        setPreviousTarget(target);
       }
     }
   }
-  
+
   const gameReady = roomUsers && roomUsers.length > 3;
   const gamePostion = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : '';
+  const voteCount = votes ? Object.values(votes).reduce((a, b) => a + b, 0) : 0;
   const voteTracker = nightTime || dayCount === 0 ? undefined : `[${voteCount}/${aliveCount}]`;
 
   const instruction = () => {

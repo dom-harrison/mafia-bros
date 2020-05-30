@@ -65,7 +65,7 @@ body {
 }
 
 .room {
-  height: calc(100% - 30px);
+  min-height: calc(100% - 30px);
 
   .title{
     color: gainsboro;
