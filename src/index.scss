@@ -91,6 +91,10 @@ body {
   min-height: 60px;
   padding: 5px;
 
+  &.revote {
+    background: darkgrey;
+  }
+
   &.selected {
     background: darkgoldenrod;
   }
@@ -205,9 +209,9 @@ body {
   }
 }
 
-.primary-button {
+.button {
   font-family: CorleoneDue, Arial, Helvetica, sans-serif;
-  font-size: 20pt;
+  font-size: 18pt;
   letter-spacing: 2px;
   background: darkgoldenrod;
   color: gainsboro;
@@ -216,6 +220,17 @@ body {
   padding: 5px 10px;
   margin: 10px;
   cursor: pointer;
+
+  &.secondary {
+    background: transparent;
+    border: 1px solid darkgoldenrod;
+    color: darkgoldenrod;
+    bottom: 0;
+    font-size: 12pt;
+    margin: 10px 0;
+    position: absolute;
+    transform: translateX(-50%);
+  }
   
   &.deactivated{
     background: dimgrey;

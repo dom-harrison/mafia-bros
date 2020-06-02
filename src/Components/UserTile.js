@@ -7,13 +7,13 @@ const SYMBOL = {
   "doctor": "♥️",
 };
 
-const UserTile = ({ user = {}, index = 0, selected = false, handleUserClick, you = false }) => {
+const UserTile = ({ user = {}, index = 0, selected = false, handleUserClick, you = false, revoteCandidate }) => {
   const { name, dead, role } = user;
 
   const symbol = role ? SYMBOL[role] : '';
 
     return (
-      <div className={`user${selected ? ' selected' : ''}${you ? ' you' : ''}`}  onClick={() => dead ? false : handleUserClick(name, index)}>
+      <div className={`user${selected ? ' selected' : ''}${you ? ' you' : ''}${revoteCandidate ? ' revote' : ''}`}  onClick={() => dead ? false : handleUserClick(name, index)}>
         <div className="user-text">{name}</div>
         <div className={`card ${role ? role : 'unknown'}${dead ? ' dead' : ''}`}>
           <span className="top">{symbol}</span>

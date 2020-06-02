@@ -4,6 +4,7 @@ import UserTile from "./UserTile";
 
 const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction }) => {
   const { name, dayCount, nightTime, aliveCount, message, votes, revote, gameOver } = room;
+  const revoteCount = revote ? revote.count : 0;
 
   const [actionCompleted, setActionCompleted] = useState(false);
   const [previousTarget, setPreviousTarget] = useState('');
@@ -26,8 +27,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       setUserMessage('');
     }
   }, [roomUsers, userName])
-
-  const revoteCount = revote ? revote.count : 0;
+  
   useEffect(() => {
     setActionCompleted(false);
     setSelectedIndex(undefined);
@@ -54,7 +54,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   }
 
   const gameReady = roomUsers && roomUsers.length > 3;
-  const gamePostion = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : '';
+  const gamePosition = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : '';
   const voteCount = votes ? Object.values(votes).reduce((a, b) => a + b, 0) : 0;
   const voteTracker = nightTime || dayCount === 0 ? undefined : `[${voteCount}/${aliveCount}]`;
 
@@ -87,22 +87,23 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       handleUserClick={handleUserClick}
       you={user && user.name === u.name}
       key={u.name} 
+      revoteCandidate={revote && revote.users.some(us => us === u.name)}
     />
   );
 
   return (
     <div className={`room section ${nightTime ? 'night' : 'day'}`}>
-      <div className="title">{gamePostion ? gamePostion : `Welcome to ${name}`}</div>
+      <div className="title">{gamePosition ? gamePosition : `Welcome to ${name}`}</div>
       {dayCount > 0 && !gameOver? <div>{`${instruction()} ${voteTracker ? voteTracker : ''}`}</div> : undefined}
       <div className="users">{userTiles}</div>
       <div>{userMessage || message}</div>
       {dayCount === 0 && user.host && 
         <button 
-          className={`primary-button ${gameReady ? '' : 'deactivated'}`} 
+          className={`button primary ${gameReady ? '' : 'deactivated'}`} 
           onClick={gameReady ? handleStartGame : undefined}>Start game
         </button>
       }
-      <button className="primary-button" onClick={handleLeaveRoom}>Leave village</button>
+      <button className={`button ${gamePosition && !gameOver ? 'secondary' : 'primary'}`} onClick={handleLeaveRoom}>Leave village</button>
     </div>
   );
 };

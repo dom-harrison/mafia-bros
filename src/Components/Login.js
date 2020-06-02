@@ -26,7 +26,7 @@ const Login = ({ handleLogin, connectError }) => {
     <form className="login section" onSubmit={handleSubmit}>
       <div className="field">User Name<br/><input value={inputName} onChange={(e) => handleInput(e, 'name') } /></div>
       <div className="field">Village<br/><input value={inputRoom} onChange={(e) => handleInput (e, 'village')} /></div>
-      <button className="primary-button" type='submit'>Enter Village</button>
+      <button className="button primary" type='submit'>Enter Village</button>
       {connectError && <p className="connection-error">{connectError === 'Game started' ? 'Game already started': 'Error - please refresh and try again'}</p>}
     </form>
   );
