@@ -65,7 +65,13 @@ body {
 }
 
 .room {
-  height: calc(100% - 30px);
+  min-height: calc(100% - 30px);
+
+  .title{
+    color: gainsboro;
+    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+    font-size: 25pt;
+  }
 
   .users {
     display: flex;
@@ -79,12 +85,36 @@ body {
 }
 
 .user {
-  margin: 10px;
+  border-radius: 5px;
+  margin: 5px;
   min-width: 60px;
   min-height: 60px;
+  padding: 5px;
+
+  &.revote {
+    background: darkgrey;
+  }
 
   &.selected {
     background: darkgoldenrod;
+  }
+
+  &.you {
+    .card {
+      border-color: darkgoldenrod
+    }
+    .user-text {
+      color: darkgoldenrod
+    }
+
+    &.selected {
+      .card {
+        border-color: darkslategrey
+      }
+      .user-text {
+        color: darkslategrey
+      }
+    }
   }
 
   .card {
@@ -109,12 +139,32 @@ body {
       color: gainsboro;
     }
 
+    &.policeman, &.doctor{
+      color: indianred;
+    }
+
+    &.dead {
+      background: dimgray;
+      color: gainsboro;
+    }
+
     span {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100%;
+      height: calc(100%/3);
+
+      &.top {
+        justify-content: flex-start;
+        padding-left: 5px;
+      }
+
+      &.bottom {
+        justify-content: flex-end;
+        padding-right: 5px;
+      } 
     }
+    
   }
   
   
@@ -159,9 +209,9 @@ body {
   }
 }
 
-.primary-button {
+.button {
   font-family: CorleoneDue, Arial, Helvetica, sans-serif;
-  font-size: 20pt;
+  font-size: 18pt;
   letter-spacing: 2px;
   background: darkgoldenrod;
   color: gainsboro;
@@ -169,5 +219,21 @@ body {
   border-radius: 5pt;
   padding: 5px 10px;
   margin: 10px;
-  cursor: pointer
+  cursor: pointer;
+
+  &.secondary {
+    background: transparent;
+    border: 1px solid darkgoldenrod;
+    color: darkgoldenrod;
+    bottom: 0;
+    font-size: 12pt;
+    margin: 10px 0;
+    position: absolute;
+    transform: translateX(-50%);
+  }
+  
+  &.deactivated{
+    background: dimgrey;
+    cursor: default; 
+  }
 }

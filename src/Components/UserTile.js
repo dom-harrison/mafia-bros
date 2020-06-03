@@ -1,14 +1,26 @@
 import React from 'react';
 
-const UserTile = ({ user = {}, index = 0, selected = false, handleUserClick }) => {
+const SYMBOL = {
+  "mafia": "♠️",
+  "villager": "♣️",
+  "policeman": "♦️",
+  "doctor": "♥️",
+};
+
+const UserTile = ({ user = {}, index = 0, selected = false, handleUserClick, you = false, revoteCandidate }) => {
   const { name, dead, role } = user;
+
+  const symbol = role ? SYMBOL[role] : '';
+
     return (
-      <div className={`user ${selected ? 'selected' : ''}`}  onClick={() => dead ? false : handleUserClick(name, index)}>
-        <div>{name}</div>
-        <div className={`card ${role ? role : 'unknown'} ${dead ? 'dead' : ''}`}>
+      <div className={`user${selected ? ' selected' : ''}${you ? ' you' : ''}${revoteCandidate ? ' revote' : ''}`}  onClick={() => dead ? false : handleUserClick(name, index)}>
+        <div className="user-text">{name}</div>
+        <div className={`card ${role ? role : 'unknown'}${dead ? ' dead' : ''}`}>
+          <span className="top">{symbol}</span>
           <span>{role || '?'}</span>
+          <span className="bottom">{symbol}</span>
         </div>
-        <div>{dead ? 'Dead' : 'Alive'}</div>
+        <div className="user-text">{dead ? 'Dead' : 'Alive'}</div>
       </div>
     );
   };

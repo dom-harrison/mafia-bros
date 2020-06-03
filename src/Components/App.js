@@ -4,7 +4,8 @@ import Login from "./Login";
 import { onNewMessage, onRoomStatus, onRoomUsers, emit, onConnectionError } from "../api/index";
 
 const App = () => {
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState('')
+  const [roomName, setRoomName] = useState('');
   const [formComplete, setFormComplete] = useState(false);
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState({});
@@ -50,6 +51,7 @@ const App = () => {
   }, []);
 
   const handleLogin = (name, roomName) => {
+    setRoomName(roomName);
     setRoom({});
     setRoomUsers([]);
     emit('login', { name, roomName });
@@ -58,10 +60,11 @@ const App = () => {
   }
 
   const handleLeaveRoom = () => {
-    emit('leave_room');
+    emit('leave_room', roomName);
     setFormComplete(false);
     setRoom({});
     setRoomUsers([]);
+    setRoomName('');
   }
 
   const handleStartGame = () => {

@@ -1,10 +1,13 @@
 import socketIOClient from "socket.io-client";
 
-const hostName = window.location.hostname;
-const endpoint = `${hostName}:4000`;
-// const endpoint = 'mb-server:4000'
-const socket = socketIOClient(endpoint);
+const clientHost = window.location.hostname;
+let endpoint = `${clientHost}:4000`
 
+if (clientHost.includes('client')){
+  endpoint = clientHost.replace('client', 'server');
+}
+
+const socket = socketIOClient(endpoint/*, {transports: ['websocket', 'polling']}*/);
 
 socket.on('error', error => {
   console.log(error)
@@ -38,7 +41,7 @@ export const onRoomStatus = (cb) => {
 
 export const onRoomUsers = (cb) => {
   socket.on("room_users", users => {
-    console.log(users);
+    // console.log(users);
     cb(users);
   });
 }
