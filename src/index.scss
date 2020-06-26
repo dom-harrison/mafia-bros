@@ -8,13 +8,14 @@
   src: local('CorleoneDue'), url(./fonts/CorleoneDue.TTF) format('truetype');
 }
 
+* { box-sizing: border-box }
 
 body {
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
   color: gainsboro;
   margin: auto 0;
-  background: darkslategrey;
+  background: #2f2f2f;
   width: 100%;
   
 }
@@ -23,13 +24,13 @@ body {
   height: 100vh;
 
   .app-header {
-    background: gainsboro;
+    background: #505050;
     border-radius: 0 0 5px 5px;
     box-shadow: 0px 2px 5px 0px black;
     color: darkgoldenrod;
     cursor: default;
     font-family: Corleone, Arial, Helvetica, sans-serif;
-    font-size: 45pt;
+    font-size: 38pt;
     position: fixed;
     width: 100%;
     z-index: 100;
@@ -37,46 +38,47 @@ body {
   }
 
   .app-body {
-    height: calc(100% - 75px);
+    height: calc(100% - 64px);
     margin: 0 auto;
     max-width: 500px;
-    padding-top: 75px;
+    padding-top: 64px;
   }
 }
 
 .section {
-  background: dimgrey;
-  border: solid 2px gainsboro;
+  background: darkslategrey;
+  border: solid 1px #505050;
   border-radius: 5px;
   box-shadow: 0px 2px 5px 0px black;
-  box-sizing: border-box;
   margin: 15px 15px;
   padding: 10px;
   position: relative;
+
+  .title {
+    color: gainsboro;
+    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+    font-size: 22pt;
+  }
 
   .field {
     margin: 5px
   }
 
   input {
-    margin: 3px;
+    height: 100%
   }
 
 }
 
 .room {
   min-height: calc(100% - 30px);
-
-  .title{
-    color: gainsboro;
-    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
-    font-size: 25pt;
-  }
+  padding-bottom: 45px;
 
   .users {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin: 10px 0;
+    justify-content: center;
   }
 
   &.night{
@@ -84,12 +86,105 @@ body {
   }
 }
 
+
+.set-name {
+  min-height: calc(100% - 30px);
+
+  .input-body {
+    margin: auto;
+    border: 1px dotted gainsboro;
+    border-radius: 3px;
+    display: flex;
+    height: 50px;
+
+      .input-span {
+        text-align: left;
+        margin: 10px 0 10px 10px;
+        width: 70%;
+      }
+
+      .name-span {
+        color: darkgoldenrod;
+        font-family: Corleone, Arial, Helvetica, sans-serif;
+        font-size: 30pt;
+        line-height: 100%;
+        margin: auto;
+        width: 70%;
+      }
+
+      .confirm-name {
+        font-size: 12pt;
+        width: 30%;
+        padding: 0;
+        margin: 10px 10px 10px;
+      }
+
+      .edit-name {
+        font-size: 12pt;
+        width: 30%;
+        padding: 0;
+        margin: 10px 10px 10px;
+        background: transparent;
+        border: 1px solid darkgoldenrod;
+        color: darkgoldenrod;
+      }
+  }
+}
+
+.join-room {
+  min-height: calc(100% - 30px);
+
+  .rooms-grid {
+    margin: auto;
+
+    .room-option {
+      border: 1px dotted gainsboro;
+      border-radius: 3px;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 5px;
+      padding: 10px;
+
+      .room-span {
+        height: 28px;
+        text-align: left;
+        width: 70%;
+
+        .room-name{
+          color: gainsboro;
+          font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+          font-size: 20pt;
+        }
+
+        input {
+          height: 100%;
+        }
+
+      }
+
+      .join-room{
+        font-size: 12pt;
+        height: 28px;
+        margin: 0;
+        padding: 0;
+        width: 30%;
+      }
+
+      .validation-error {
+        color: indianred;
+        margin-top: 5px;
+        width: 100%;
+      }
+    }
+  }
+}
+
 .user {
   border-radius: 5px;
   margin: 5px;
-  min-width: 60px;
-  min-height: 60px;
-  padding: 5px;
+  min-width: 80px;
+  min-height: 80px;
+  padding: 5px 0 10px;
 
   &.revote {
     background: darkgrey;
@@ -97,6 +192,11 @@ body {
 
   &.selected {
     background: darkgoldenrod;
+  }
+
+  &.dead {
+    opacity: 0.3;
+    transition: 1s;
   }
 
   &.you {
@@ -124,10 +224,10 @@ body {
     color: darkslategrey;
     display: inline-block;
     font-size: 8pt;
-    height: 60px;
+    height: 70px;
     margin: 0 auto;
     vertical-align: middle;
-    width: 50px;
+    width: 55px;
 
     &.unknown {
       background: indianred;
@@ -163,6 +263,25 @@ body {
         justify-content: flex-end;
         padding-right: 5px;
       } 
+    }
+
+    .user-votes {
+      z-index: 100;
+      background: darkgoldenrod;
+      color: gainsboro;
+      width: 20px;
+      height: 20px;
+      left: -5px;
+      position: relative;
+      bottom: 15px;
+      border-radius: 15px;
+      font-size: 16px;
+      border: 1px solid;
+      transition: 1s;
+
+      &.hidden {
+        display: none;
+      }
     }
     
   }
@@ -236,4 +355,47 @@ body {
     background: dimgrey;
     cursor: default; 
   }
+}
+
+.modal {
+  width: 100%;
+  height: 0;
+  transition: 2s;
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  .background {
+    z-index: 200;
+    opacity: 0.75;
+    background-color: black;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .foreground {
+    background: #505050;
+    border: solid 1px gainsboro;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px black;
+    position: relative;
+    top: 200px;
+    margin: auto;
+    width: 250px;
+    z-index: 300;
+  }
+
+  .modal-message {
+    color: darkgoldenrod;
+    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+    font-size: 20pt;
+    letter-spacing: 2px;
+    line-height: 50px;
+  }
+
 }

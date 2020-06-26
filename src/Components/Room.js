@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import UserTile from "./UserTile";
 
 
-const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction }) => {
+const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction, setModalMessage, setModalConfirm }) => {
   const { name, dayCount, nightTime, aliveCount, message, votes, revote, gameOver } = room;
   const revoteCount = revote ? revote.count : 0;
 
@@ -21,17 +21,20 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       ...roomUsers[userIndex],
       host
     }));
-    if (roomUsers && roomUsers.length < 4) { 
-      setUserMessage(`Need ${4 - roomUsers.length} more players`)
+    if (roomUsers && roomUsers.length < 4 && !gameOver) { 
+      setUserMessage(`${4 - roomUsers.length} more players needed...`)
     } else {
       setUserMessage('');
     }
-  }, [roomUsers, userName])
+  }, [roomUsers, userName, gameOver])
   
   useEffect(() => {
     setActionCompleted(false);
     setSelectedIndex(undefined);
-  }, [nightTime, revoteCount])
+    if (dayCount === 0) {
+      setPreviousTarget('');
+    }
+  }, [nightTime, revoteCount, dayCount])
 
   const handleUserClick = (target, index) => {
     if (dayCount > 0 && 
@@ -53,10 +56,21 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
     }
   }
 
+  const handleLeaveClick = () => {
+    setModalMessage('Are you sure you want to leave?');
+    setModalConfirm(handleLeaveRoom);
+  }
+
   const gameReady = roomUsers && roomUsers.length > 3;
   const gamePosition = dayCount > 0 ? `${nightTime ? 'Night' : 'Day'} ${dayCount}` : '';
   const voteCount = votes ? Object.values(votes).reduce((a, b) => a + b, 0) : 0;
   const voteTracker = nightTime || dayCount === 0 ? undefined : `[${voteCount}/${aliveCount}]`;
+
+  const title = () => {
+    if (gameOver) { return 'Game over!' }
+    else if (gamePosition) { return gamePosition }
+    else { return `Welcome to ${name}` };
+  }
 
   const instruction = () => {
     if (dayCount > 0 && user.dead) {
@@ -88,15 +102,16 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       you={user && user.name === u.name}
       key={u.name} 
       revoteCandidate={revote && revote.users.some(us => us === u.name)}
+      userVotes={votes[u.name]}
     />
   );
 
   return (
     <div className={`room section ${nightTime ? 'night' : 'day'}`}>
-      <div className="title">{gamePosition ? gamePosition : `Welcome to ${name}`}</div>
-      {dayCount > 0 && !gameOver? <div>{`${instruction()} ${voteTracker ? voteTracker : ''}`}</div> : undefined}
+      <div className="title">{title()}</div>
+      {dayCount > 0 && !gameOver? <div className="instruction">{`${instruction()} ${voteTracker ? voteTracker : ''}`}</div> : undefined}
       <div className="users">{userTiles}</div>
-      <div>{userMessage || message}</div>
+      <div className="user-message">{userMessage || message}</div>
       {dayCount === 0 && user.host && 
         <button 
           className={`button primary ${gameReady ? '' : 'deactivated'}`} 
