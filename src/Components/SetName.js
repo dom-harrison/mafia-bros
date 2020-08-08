@@ -1,29 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Login = ({ setUserName, userName = '' }) => {
+const Login = ({ handleSetUserName, userName = '', loginError = '', setLoginError}) => {
 
   const [inputName, setInputName] = useState(userName);
   const [confirmed, setConfirmed] = useState(!!userName);
 
-
-  const handleInput = (e, field) => {
-    const input = e.target.value.substr(0, 12);
-    if (field === 'name') {
-      setInputName(input);
+  useEffect(() => {
+    if (loginError) {
+      setConfirmed(false);
+      handleSetUserName('');
+    } else if (userName) {
+      setConfirmed(true);
     }
-  }
+  }, [loginError, userName, handleSetUserName]);
+
+
+  const handleInput = (e) => {
+    const input = e.target.value.substr(0, 12);
+    setLoginError('');
+    setInputName(input);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (confirmed) {
       setConfirmed(false)
-      setUserName('');
+      handleSetUserName('');
     } else if (inputName) {
-      setUserName(inputName);
-      setConfirmed(true);
+      handleSetUserName(inputName);
+      if (!loginError) {
+        setConfirmed(true);
+      }
     }
-  }
+  };
 
   return (
     <form className="set-name section" onSubmit={handleSubmit}>
@@ -31,12 +41,13 @@ const Login = ({ setUserName, userName = '' }) => {
       {confirmed ?
         <div className="input-body">
           <span className="name-span">{userName}</span>
-          <button className="button edit-name" type='submit'>Edit</button>
+          <button className="button confirm edit" type='submit'>Edit</button>
         </div>
         :
         <div className="input-body">
-          <span className="input-span"><input value={inputName} placeholder="Enter user name" onChange={(e) => handleInput(e, 'name') } /></span>
-          <button className="button confirm-name" type='submit'>Confirm</button>
+          <span className="input-span"><input value={inputName} placeholder="Enter user name" onChange={(e) => handleInput(e) } /></span>
+          <button className="button confirm" type='submit'>Confirm</button>
+          {loginError && <div className="validation-error">{loginError}</div>}
         </div>
       }
     </form>

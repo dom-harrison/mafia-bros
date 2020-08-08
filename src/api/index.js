@@ -45,6 +45,13 @@ export const onOpenRooms = (cb) => {
   });
 }
 
+export const onReconnectRoom = (cb) => {
+  socket.on("reconnect_room", room => {
+    console.log(room);
+    cb(room);
+  });
+}
+
 export const onRoomStatus = (cb) => {
     socket.on("room_status", data => {
       console.log('Status:', data);

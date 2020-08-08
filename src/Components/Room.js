@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import UserTile from "./UserTile";
 
 
-const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction, setModalMessage, setModalConfirm }) => {
+const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction }) => {
   const { name, dayCount, nightTime, aliveCount, message, votes, revote, gameOver } = room;
-  const revoteCount = revote ? revote.count : 0;
+  const eventStamp = `${dayCount}${nightTime}${revote.count}`;
 
-  const [actionCompleted, setActionCompleted] = useState(false);
-  const [previousTarget, setPreviousTarget] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(undefined);
+  const [selectedUser, setSelectedUser] = useState(undefined);
   const [userMessage, setUserMessage] = useState('');
   const [user, setUser] = useState({});
 
@@ -21,44 +19,34 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       ...roomUsers[userIndex],
       host
     }));
-    if (roomUsers && roomUsers.length < 4 && !gameOver) { 
+    if (roomUsers && roomUsers.length < 4 && dayCount === 0) { 
       setUserMessage(`${4 - roomUsers.length} more players needed...`)
     } else {
       setUserMessage('');
     }
-  }, [roomUsers, userName, gameOver])
+  }, [roomUsers, userName, dayCount])
   
   useEffect(() => {
-    setActionCompleted(false);
-    setSelectedIndex(undefined);
-    if (dayCount === 0) {
-      setPreviousTarget('');
+    if (user.previousEvent === eventStamp) {
+      setSelectedUser(user.previousTarget);
+    } else {
+      setSelectedUser(undefined);
     }
-  }, [nightTime, revoteCount, dayCount])
+  }, [user, eventStamp]);
 
   const handleUserClick = (target, index) => {
     if (dayCount > 0 && 
-      !gameOver && 
-      !actionCompleted && 
-      !user.dead && 
-      (user.role !== 'villager' || !nightTime) && 
-      (revote.users.length === 0 || revote.users.includes(target))) {
-      if (nightTime && user.role === 'doctor' && target === previousTarget) {
+      !gameOver &&
+      !user.dead &&
+      (user.role !== 'villager' || !nightTime) &&
+      (revote.users.length === 0 || revote.users.includes(target)) &&
+      !selectedUser) {
+      if (nightTime && user.role === 'doctor' && target === user.previousTarget) {
         setUserMessage('Can\'t save the same person two nights in row!')
       } else {
       handleAction(target, user.role);
-      setActionCompleted(true);
-      setSelectedIndex(index);
-      }
-      if (nightTime && user.role === 'doctor' ) {
-        setPreviousTarget(target);
       }
     }
-  }
-
-  const handleLeaveClick = () => {
-    setModalMessage('Are you sure you want to leave?');
-    setModalConfirm(handleLeaveRoom);
   }
 
   const gameReady = roomUsers && roomUsers.length > 3;
@@ -76,7 +64,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
     if (dayCount > 0 && user.dead) {
       return 'You are dead!';
     } else if (nightTime) {
-      if (actionCompleted) { return 'Go to sleep'};
+      if (selectedUser) { return 'Go to sleep'};
       switch (user.role) {
         case 'mafia':
           return 'Choose who you want to kill';
@@ -88,7 +76,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
           return 'Go to sleep';
       }
     } else {
-      if (actionCompleted) { return ''};
+      if (selectedUser) { return ''};
       return 'Vote for who you want to lynch';
     }
   }
@@ -97,7 +85,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
     <UserTile 
       user={u} 
       index={index} 
-      selected={selectedIndex === index} 
+      selected={selectedUser === u.name} 
       handleUserClick={handleUserClick}
       you={user && user.name === u.name}
       key={u.name} 

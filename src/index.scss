@@ -95,11 +95,11 @@ body {
     border: 1px dotted gainsboro;
     border-radius: 3px;
     display: flex;
-    height: 50px;
+    flex-wrap: wrap;
+    padding: 10px;
 
       .input-span {
         text-align: left;
-        margin: 10px 0 10px 10px;
         width: 70%;
       }
 
@@ -112,21 +112,10 @@ body {
         width: 70%;
       }
 
-      .confirm-name {
-        font-size: 12pt;
-        width: 30%;
-        padding: 0;
-        margin: 10px 10px 10px;
-      }
-
-      .edit-name {
-        font-size: 12pt;
-        width: 30%;
-        padding: 0;
-        margin: 10px 10px 10px;
-        background: transparent;
-        border: 1px solid darkgoldenrod;
-        color: darkgoldenrod;
+      .validation-error {
+        color: indianred;
+        margin-top: 5px;
+        width: 100%;
       }
   }
 }
@@ -160,14 +149,6 @@ body {
           height: 100%;
         }
 
-      }
-
-      .join-room{
-        font-size: 12pt;
-        height: 28px;
-        margin: 0;
-        padding: 0;
-        width: 30%;
       }
 
       .validation-error {
@@ -351,10 +332,30 @@ body {
     transform: translateX(-50%);
   }
   
-  &.deactivated{
+  &.deactivated {
     background: dimgrey;
     cursor: default; 
   }
+
+  &.confirm {
+    font-size: 12pt;
+    height: 28px;
+    margin: 0;
+    padding: 0;
+    width: 30%;
+
+    &.reconnect {
+      background: indianred;
+    }
+
+    &.edit {
+      background: transparent;
+      border: 1px solid darkgoldenrod;
+      color: darkgoldenrod;
+      margin: auto 0;
+    }
+  }
+
 }
 
 .modal {

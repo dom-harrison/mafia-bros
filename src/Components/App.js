@@ -3,16 +3,18 @@ import JoinRoom from "./JoinRoom";
 import Room from "./Room";
 import SetName from "./SetName";
 import Modal from "./Modal";
-import { onNewMessage, onOpenRooms, onRoomStatus, onRoomUsers, emit, onConnectionError, onReconnect, onDisconnect, socketOff } from "../api/index";
+import { onNewMessage, onOpenRooms, onReconnectRoom, onRoomStatus, onRoomUsers, emit, onConnectionError, onReconnect, onDisconnect, socketOff } from "../api/index";
 
 const App = () => {
   const [userName, setUserName] = useState('');
   const [openRooms, setOpenRooms] = useState([]);
+  const [reconnectRoom, setReconnectRoom] = useState(undefined);
   const [roomName, setRoomName] = useState('');
   const [messages, setMessages] = useState([]);
   const [room, setRoom] = useState(undefined);
   const [roomUsers, setRoomUsers] = useState([]);
   const [connectError, setConnectError] = useState(undefined);
+  const [loginError, setLoginError] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [modalConfirm, setModalConfirm] = useState(undefined);
 
@@ -23,6 +25,9 @@ const App = () => {
     });
     onOpenRooms(rooms => {
       setOpenRooms(rooms);
+    });
+    onReconnectRoom(room => {
+      setReconnectRoom(room);
     });
     onRoomStatus(data => {
       setRoom(data);
@@ -57,14 +62,18 @@ const App = () => {
         setModalMessage('');
         console.log('Room unavailable leave room');
         handleLeaveRoom();
+      } else if (res === 'user-exists') {
+        setLoginError('User already exists');
+        console.log('User exisits');
       }
     })
-    window.addEventListener("beforeunload", (e) => {
-      console.log('Unload leave room');
+    window.addEventListener("beforeunload", () => {
+      emit('logout', 'Unload');
       handleLeaveRoom();
     });
     return () => {
-      window.removeEventListener("beforeunload", (e) => {
+      window.removeEventListener("beforeunload", () => {
+        emit('logout', 'Unload');
         handleLeaveRoom();
       });
     }
@@ -72,10 +81,13 @@ const App = () => {
 
   useEffect(() => {
     onReconnect(() => {
-      if (userName && roomName) {
+      if (userName) {
+        emit('login', { name: userName, reconnecting: true });
+      }
+      if (roomName) {
         setModalMessage('Reconnecting');
         console.log('Reconnecting to room:', roomName);
-        emit('login', { name: userName, roomName: roomName, reconnecting: true });
+        emit('join_room', { name: userName, roomName: roomName, reconnecting: true });
       }
     })
     onDisconnect(() => {
@@ -88,10 +100,11 @@ const App = () => {
     }
   }, [userName, roomName])
 
-  const handleLogin = (choosenRoom) => {
+  const handleJoinRoom = (choosenRoom, reconnecting) => {
     setRoomName(choosenRoom);
+    setReconnectRoom(undefined);
     setRoomUsers([]);
-    emit('login', {name: userName, roomName: choosenRoom});
+    emit('join_room', {name: userName, roomName: choosenRoom, reconnecting});
   }
 
   const handleLeaveRoom = () => {
@@ -110,6 +123,13 @@ const App = () => {
     emit('action', { target,  role });
   }
 
+  const handleSetUserName = (name) => {
+    setUserName(name);
+    if (name) {
+      emit('login', { name });
+    }
+  }
+
   return (
   <div id='app' className="app">
     {modalMessage && <Modal message={modalMessage} onConfirm={modalConfirm}/>}
@@ -117,8 +137,8 @@ const App = () => {
     <div className="app-body">
     {!room &&
       <div>
-      <SetName setUserName={setUserName} userName={userName}/>
-      <JoinRoom openRooms={openRooms} handleLogin={handleLogin} connectError={connectError} userName={userName} />
+      <SetName handleSetUserName={handleSetUserName} userName={userName} loginError={loginError} setLoginError={setLoginError}/>
+      <JoinRoom openRooms={openRooms} reconnectRoom={reconnectRoom} handleJoinRoom={handleJoinRoom} connectError={connectError} userName={userName} />
       </div>
     }
     {!!room && 
