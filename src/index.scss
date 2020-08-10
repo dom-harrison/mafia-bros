@@ -166,6 +166,7 @@ body {
   min-width: 80px;
   min-height: 80px;
   padding: 5px 0 10px;
+  perspective: 1000px;
 
   &.revote {
     background: darkgrey;
@@ -180,54 +181,61 @@ body {
     transition: 1s;
   }
 
-  &.you {
-    .card {
-      border-color: darkgoldenrod
-    }
-    .user-text {
-      color: darkgoldenrod
-    }
-
-    &.selected {
-      .card {
-        border-color: darkslategrey
-      }
-      .user-text {
-        color: darkslategrey
-      }
-    }
-  }
-
   .card {
-    background: white;
-    border: solid 2px gainsboro;
-    border-radius: 5pt;
-    color: darkslategrey;
     display: inline-block;
     font-size: 8pt;
     height: 70px;
     margin: 0 auto;
+    position: relative;
+    transition: all 1.2s ease;
+    transform-style: preserve-3d;
     vertical-align: middle;
     width: 55px;
 
-    &.unknown {
+    &.dead {
+      background: dimgray;
+      color: gainsboro;
+    }
+
+    &.known {
+      transform: rotateY(180deg);
+    }
+
+    .front {
+      backface-visibility: hidden;
       background: indianred;
+      border: solid 2px gainsboro;
+      border-radius: 5pt;
       color: gainsboro;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+
+      span {
+        height: 100%;
+      }
     }
 
-    &.dead {
-      background: dimgray;
-      color: gainsboro;
+    .back {
+      backface-visibility: hidden;
+      background: white;
+      border: solid 2px gainsboro;
+      border-radius: 5pt;
+      color: darkslategrey;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+      width: 100%;
+
+      &.policeman, &.doctor{
+        color: indianred;
+      }
     }
 
-    &.policeman, &.doctor{
-      color: indianred;
-    }
-
-    &.dead {
-      background: dimgray;
-      color: gainsboro;
-    }
 
     span {
       display: flex;
@@ -245,28 +253,45 @@ body {
         padding-right: 5px;
       } 
     }
+  
+  }
 
-    .user-votes {
-      z-index: 100;
-      background: darkgoldenrod;
-      color: gainsboro;
-      width: 20px;
-      height: 20px;
-      left: -5px;
-      position: relative;
-      bottom: 15px;
-      border-radius: 15px;
-      font-size: 16px;
-      border: 1px solid;
-      transition: 1s;
+  &.you {
+    .front, .back {
+      border-color: darkgoldenrod
+    }
+    .user-text {
+      color: darkgoldenrod
+    }
 
-      &.hidden {
-        display: none;
+    &.selected {
+      .front, .back {
+        border-color: darkslategrey
+      }
+      .user-text {
+        color: darkslategrey
       }
     }
-    
   }
-  
+
+  .user-votes {
+    z-index: 100;
+    background: darkgoldenrod;
+    color: gainsboro;
+    width: 20px;
+    height: 20px;
+    left: 5px;
+    position: absolute;
+    bottom: 5px;
+    border-radius: 15px;
+    font-size: 16px;
+    border: 1px solid;
+    transition: 1s;
+
+    &.hidden {
+      display: none;
+    }
+  }
   
 }
 
