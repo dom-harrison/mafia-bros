@@ -17,6 +17,10 @@ body {
   margin: auto 0;
   background: #2f2f2f;
   width: 100%;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none; 
   
 }
 
