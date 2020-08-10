@@ -93,7 +93,7 @@ const App = () => {
   useEffect(() => {
     const handleUnload = () => {
       emit('logout', 'Unload');
-      handleLeaveRoom();
+      emit('leave_room');
     };
 
     window.addEventListener("beforeunload", handleUnload);
