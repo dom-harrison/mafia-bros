@@ -69,10 +69,12 @@ const App = () => {
     })
     window.addEventListener("beforeunload", () => {
       emit('logout', 'Unload');
+      return 'unloading';
     });
     return () => {
       window.removeEventListener("beforeunload", () => {
         emit('logout', 'Unload');
+        return 'unloading';
       });
     }
   }, []);
