@@ -67,16 +67,6 @@ const App = () => {
         console.log('User exisits');
       }
     })
-    window.addEventListener("beforeunload", () => {
-      emit('logout', 'Unload');
-      handleLeaveRoom();
-    });
-    return () => {
-      window.removeEventListener("beforeunload", () => {
-        emit('logout', 'Unload');
-        handleLeaveRoom();
-      });
-    }
   }, []);
 
   useEffect(() => {
@@ -99,6 +89,18 @@ const App = () => {
       socketOff();
     }
   }, [userName, roomName])
+
+  useEffect(() => {
+    const handleUnload = () => {
+      emit('logout', 'Unload');
+      handleLeaveRoom();
+    };
+
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    }
+  }, [])
 
   const handleJoinRoom = (choosenRoom, reconnecting) => {
     setRoomName(choosenRoom);
