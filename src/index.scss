@@ -152,7 +152,6 @@ body {
         input {
           height: 100%;
         }
-
       }
 
       .validation-error {
@@ -196,10 +195,6 @@ body {
     vertical-align: middle;
     width: 55px;
 
-    &.dead {
-      background: dimgray;
-      color: gainsboro;
-    }
 
     &.known {
       transform: rotateY(180deg);
@@ -275,6 +270,13 @@ body {
       .user-text {
         color: darkslategrey
       }
+    }
+  }
+
+  &.dead {      
+    .front, .back {
+      background: dimgray;
+      color: gainsboro;
     }
   }
 

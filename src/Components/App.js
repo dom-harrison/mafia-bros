@@ -73,13 +73,11 @@ const App = () => {
         console.log('User exisits');
       }
     })
-    window.addEventListener("beforeunload", () => handleUnload('beforeunload'));
-    window.addEventListener("pagehide", () => handleUnload('pagehide'));
-    window.addEventListener("unload", () => handleUnload('unload'));
+    window.addEventListener("beforeunload", () => handleUnload('beforeunload')); // desktop
+    window.addEventListener("pagehide", () => handleUnload('pagehide')); // mobile
     return () => {
       window.removeEventListener("beforeunload", () => handleUnload('beforeunload'));
       window.removeEventListener("pagehide", () => handleUnload('pagehide'));
-      window.removeEventListener("unload", () => handleUnload('unload'));
     }
   }, []);
 
