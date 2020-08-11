@@ -21,8 +21,8 @@ const App = () => {
   useEffect(() => {
     document.title = 'Mafia Bros'
 
-    const handleUnload = () => {
-      emit('logout', 'Unload');
+    const handleUnload = (message) => {
+      emit('logout', message);
       return 'unloading';
     };
 
@@ -73,9 +73,13 @@ const App = () => {
         console.log('User exisits');
       }
     })
-    window.addEventListener("beforeunload", handleUnload);
+    window.addEventListener("beforeunload", () => handleUnload('beforeunload'));
+    window.addEventListener("pagehide", () => handleUnload('pagehide'));
+    window.addEventListener("unload", () => handleUnload('unload'));
     return () => {
-      window.removeEventListener("beforeunload", handleUnload);
+      window.removeEventListener("beforeunload", () => handleUnload('beforeunload'));
+      window.removeEventListener("pagehide", () => handleUnload('pagehide'));
+      window.removeEventListener("unload", () => handleUnload('unload'));
     }
   }, []);
 
