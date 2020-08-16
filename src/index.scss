@@ -8,14 +8,19 @@
   src: local('CorleoneDue'), url(./fonts/CorleoneDue.TTF) format('truetype');
 }
 
+* { box-sizing: border-box }
 
 body {
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
   color: gainsboro;
   margin: auto 0;
-  background: darkslategrey;
+  background: #2f2f2f;
   width: 100%;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none; 
   
 }
 
@@ -23,13 +28,13 @@ body {
   height: 100vh;
 
   .app-header {
-    background: gainsboro;
+    background: #505050;
     border-radius: 0 0 5px 5px;
     box-shadow: 0px 2px 5px 0px black;
     color: darkgoldenrod;
     cursor: default;
     font-family: Corleone, Arial, Helvetica, sans-serif;
-    font-size: 45pt;
+    font-size: 38pt;
     position: fixed;
     width: 100%;
     z-index: 100;
@@ -37,46 +42,47 @@ body {
   }
 
   .app-body {
-    height: calc(100% - 75px);
+    height: calc(100% - 64px);
     margin: 0 auto;
     max-width: 500px;
-    padding-top: 75px;
+    padding-top: 64px;
   }
 }
 
 .section {
-  background: dimgrey;
-  border: solid 2px gainsboro;
+  background: darkslategrey;
+  border: solid 1px #505050;
   border-radius: 5px;
   box-shadow: 0px 2px 5px 0px black;
-  box-sizing: border-box;
   margin: 15px 15px;
   padding: 10px;
   position: relative;
+
+  .title {
+    color: gainsboro;
+    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+    font-size: 22pt;
+  }
 
   .field {
     margin: 5px
   }
 
   input {
-    margin: 3px;
+    height: 100%
   }
 
 }
 
 .room {
   min-height: calc(100% - 30px);
-
-  .title{
-    color: gainsboro;
-    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
-    font-size: 25pt;
-  }
+  padding-bottom: 45px;
 
   .users {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin: 10px 0;
+    justify-content: center;
   }
 
   &.night{
@@ -84,12 +90,86 @@ body {
   }
 }
 
+
+.set-name {
+  min-height: calc(100% - 30px);
+
+  .input-body {
+    margin: auto;
+    border: 1px dotted gainsboro;
+    border-radius: 3px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+
+      .input-span {
+        text-align: left;
+        width: 70%;
+      }
+
+      .name-span {
+        color: darkgoldenrod;
+        font-family: Corleone, Arial, Helvetica, sans-serif;
+        font-size: 30pt;
+        line-height: 100%;
+        margin: auto;
+        width: 70%;
+      }
+
+      .validation-error {
+        color: indianred;
+        margin-top: 5px;
+        width: 100%;
+      }
+  }
+}
+
+.join-room {
+  min-height: calc(100% - 30px);
+
+  .rooms-grid {
+    margin: auto;
+
+    .room-option {
+      border: 1px dotted gainsboro;
+      border-radius: 3px;
+      display: flex;
+      flex-wrap: wrap;
+      margin: 5px;
+      padding: 10px;
+
+      .room-span {
+        height: 28px;
+        text-align: left;
+        width: 70%;
+
+        .room-name{
+          color: gainsboro;
+          font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+          font-size: 20pt;
+        }
+
+        input {
+          height: 100%;
+        }
+      }
+
+      .validation-error {
+        color: indianred;
+        margin-top: 5px;
+        width: 100%;
+      }
+    }
+  }
+}
+
 .user {
   border-radius: 5px;
   margin: 5px;
-  min-width: 60px;
-  min-height: 60px;
-  padding: 5px;
+  min-width: 80px;
+  min-height: 80px;
+  padding: 5px 0 10px;
+  perspective: 1000px;
 
   &.revote {
     background: darkgrey;
@@ -99,54 +179,62 @@ body {
     background: darkgoldenrod;
   }
 
-  &.you {
-    .card {
-      border-color: darkgoldenrod
-    }
-    .user-text {
-      color: darkgoldenrod
-    }
-
-    &.selected {
-      .card {
-        border-color: darkslategrey
-      }
-      .user-text {
-        color: darkslategrey
-      }
-    }
+  &.dead {
+    opacity: 0.3;
+    transition: 1s;
   }
 
   .card {
-    background: white;
-    border: solid 2px gainsboro;
-    border-radius: 5pt;
-    color: darkslategrey;
     display: inline-block;
     font-size: 8pt;
-    height: 60px;
+    height: 70px;
     margin: 0 auto;
+    position: relative;
+    transition: all 1.2s ease;
+    transform-style: preserve-3d;
     vertical-align: middle;
-    width: 50px;
+    width: 55px;
 
-    &.unknown {
+
+    &.known {
+      transform: rotateY(180deg);
+    }
+
+    .front {
+      backface-visibility: hidden;
       background: indianred;
+      border: solid 2px gainsboro;
+      border-radius: 5pt;
       color: gainsboro;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+
+      span {
+        height: 100%;
+      }
     }
 
-    &.dead {
-      background: dimgray;
-      color: gainsboro;
+    .back {
+      backface-visibility: hidden;
+      background: white;
+      border: solid 2px gainsboro;
+      border-radius: 5pt;
+      color: darkslategrey;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg);
+      width: 100%;
+
+      &.policeman, &.doctor{
+        color: indianred;
+      }
     }
 
-    &.policeman, &.doctor{
-      color: indianred;
-    }
-
-    &.dead {
-      background: dimgray;
-      color: gainsboro;
-    }
 
     span {
       display: flex;
@@ -164,9 +252,52 @@ body {
         padding-right: 5px;
       } 
     }
-    
-  }
   
+  }
+
+  &.you {
+    .front, .back {
+      border-color: darkgoldenrod
+    }
+    .user-text {
+      color: darkgoldenrod
+    }
+
+    &.selected {
+      .front, .back {
+        border-color: darkslategrey
+      }
+      .user-text {
+        color: darkslategrey
+      }
+    }
+  }
+
+  &.dead {      
+    .front, .back {
+      background: dimgray;
+      color: gainsboro;
+    }
+  }
+
+  .user-votes {
+    z-index: 100;
+    background: darkgoldenrod;
+    color: gainsboro;
+    width: 20px;
+    height: 20px;
+    left: 5px;
+    position: absolute;
+    bottom: 5px;
+    border-radius: 15px;
+    font-size: 16px;
+    border: 1px solid;
+    transition: 1s;
+
+    &.hidden {
+      display: none;
+    }
+  }
   
 }
 
@@ -232,8 +363,71 @@ body {
     transform: translateX(-50%);
   }
   
-  &.deactivated{
+  &.deactivated {
     background: dimgrey;
     cursor: default; 
   }
+
+  &.confirm {
+    font-size: 12pt;
+    height: 28px;
+    margin: 0;
+    padding: 0;
+    width: 30%;
+
+    &.reconnect {
+      background: indianred;
+    }
+
+    &.edit {
+      background: transparent;
+      border: 1px solid darkgoldenrod;
+      color: darkgoldenrod;
+      margin: auto 0;
+    }
+  }
+
+}
+
+.modal {
+  width: 100%;
+  height: 0;
+  transition: 2s;
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  .background {
+    z-index: 200;
+    opacity: 0.75;
+    background-color: black;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  .foreground {
+    background: #505050;
+    border: solid 1px gainsboro;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px black;
+    position: relative;
+    top: 200px;
+    margin: auto;
+    width: 250px;
+    z-index: 300;
+  }
+
+  .modal-message {
+    color: darkgoldenrod;
+    font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+    font-size: 20pt;
+    letter-spacing: 2px;
+    line-height: 50px;
+  }
+
 }

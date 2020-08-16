@@ -1,5 +1,11 @@
 import socketIOClient from "socket.io-client";
 
+console.log(process.env);
+
+if (process.env.NODE_ENV === 'development' || process.env.REACT_APP_DEBUG === 'true') {
+  console.log('Debug on');
+}
+
 const clientHost = window.location.hostname;
 let endpoint = `${clientHost}:4000`
 
@@ -32,18 +38,51 @@ export const onNewMessage = (cb) => {
   });
 }
 
+export const onOpenRooms = (cb) => {
+  socket.on("open_rooms", rooms => {
+    // console.log(rooms);
+    cb(rooms);
+  });
+}
+
+export const onReconnectRoom = (cb) => {
+  socket.on("reconnect_room", room => {
+    console.log(room);
+    cb(room);
+  });
+}
+
 export const onRoomStatus = (cb) => {
     socket.on("room_status", data => {
-      // console.log(data);
+      console.log('Status:', data);
       cb(data);
     });
 }
 
 export const onRoomUsers = (cb) => {
   socket.on("room_users", users => {
-    // console.log(users);
+    console.log('Users:', users);
     cb(users);
   });
+}
+
+export const onReconnect = (cb) => {
+  socket.on("reconnect", () => {
+    console.log('reconnected');
+    cb();
+  });
+}
+
+export const onDisconnect = (cb) => {
+  socket.on("disconnect", () => {
+    console.log('disconnect');
+    cb();
+  });
+}
+
+export const socketOff = () => {
+  socket.off("reconnect");
+  socket.off("disconnect");
 }
 
 export const emit = (type, message) => {
