@@ -1,5 +1,10 @@
 [{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target" : { "namespace": "android_app", "package_name": "app.run.a.mb_client_hiatvpabha_ew.twa",
-                   "sha256_cert_fingerprints": ["21:F0:B4:28:3C:0C:5B:4A:D5:9D:27:96:E9:34:6C:49:22:60:A1:0E:0B:C3:20:27:E5:E2:32:1D:64:94:D5:FA"] }
-    }]
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { 
+        "namespace": "android_app", 
+        "package_name": "app.run.a.mb_client_hiatvpabha_ew.twa",
+        "sha256_cert_fingerprints": [
+              "21:F0:B4:28:3C:0C:5B:4A:D5:9D:27:96:E9:34:6C:49:22:60:A1:0E:0B:C3:20:27:E5:E2:32:1D:64:94:D5:FA",
+              "57:94:58:81:8A:E3:47:C0:7B:9E:B5:F0:92:22:13:D5:05:32:60:F0:22:B2:12:BB:B2:75:F3:E4:4B:AC:4E:C3"
+         ] }
+}]
