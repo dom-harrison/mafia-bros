@@ -3,7 +3,7 @@ import UserTile from "./UserTile";
 
 
 const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handleStartGame, handleAction }) => {
-  const { name, dayCount, nightTime, aliveCount, message, votes, revote, gameOver } = room;
+  const { roomName, dayCount, nightTime, aliveCount, message, votes, revote, gameOver } = room;
   const eventStamp = `${dayCount}${nightTime}${revote.count}`;
 
   const [selectedUser, setSelectedUser] = useState(undefined);
@@ -11,7 +11,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    const userIndex = roomUsers.findIndex(us => us.name === userName);
+    const userIndex = roomUsers.findIndex(us => us.userName === userName);
     const host = userIndex === 0;
     setUser(u => (
       {
@@ -34,14 +34,14 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
     }
   }, [user, eventStamp]);
 
-  const handleUserClick = (target, index) => {
+  const handleUserClick = (target) => {
     if (dayCount > 0 && 
       !gameOver &&
       !user.dead &&
       (user.role !== 'villager' || !nightTime) &&
       (revote.users.length === 0 || revote.users.includes(target)) &&
       !selectedUser) {
-      if (nightTime && user.role === 'doctor' && target === user.previousTarget) {
+      if (nightTime && user.previousSaved && user.previousSaved === target) {
         setUserMessage('Can\'t save the same person two nights in row!')
       } else {
       handleAction(target, user.role);
@@ -57,7 +57,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   const title = () => {
     if (gameOver) { return 'Game over!' }
     else if (gamePosition) { return gamePosition }
-    else { return `Welcome to ${name}` };
+    else { return `Welcome to ${roomName}` };
   }
 
   const instruction = () => {
@@ -85,28 +85,32 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
     <UserTile 
       user={u} 
       index={index} 
-      selected={selectedUser === u.name} 
+      selected={selectedUser === u.userName} 
       handleUserClick={handleUserClick}
-      you={user && user.name === u.name}
-      key={u.name} 
-      revoteCandidate={revote && revote.users.some(us => us === u.name)}
-      userVotes={votes[u.name]}
+      you={user && user.userName === u.userName}
+      key={u.userName} 
+      revoteCandidate={revote && revote.users.some(us => us === u.userName)}
+      userVotes={votes[u.userName]}
     />
   );
 
   return (
     <div className={`room section ${nightTime ? 'night' : 'day'}`}>
+    {roomUsers.length > 0 &&
+      <div>
       <div className="title">{title()}</div>
-      {dayCount > 0 && !gameOver? <div className="instruction">{`${instruction()} ${voteTracker ? voteTracker : ''}`}</div> : undefined}
-      <div className="users">{userTiles}</div>
-      <div className="user-message">{userMessage || message}</div>
-      {dayCount === 0 && user.host && 
-        <button 
-          className={`button primary ${gameReady ? '' : 'deactivated'}`} 
-          onClick={gameReady ? handleStartGame : undefined}>Start game
-        </button>
+        {dayCount > 0 && !gameOver? <div className="instruction">{`${instruction()} ${voteTracker ? voteTracker : ''}`}</div> : undefined}
+        <div className="users">{userTiles}</div>
+        <div className="user-message">{userMessage || message}</div>
+        {dayCount === 0 && user.host && 
+          <button 
+            className={`button primary ${gameReady ? '' : 'deactivated'}`} 
+            onClick={gameReady ? handleStartGame : undefined}>Start game
+          </button>
+        }
+        <button className={`button ${gamePosition && !gameOver ? 'secondary' : 'primary'}`} onClick={handleLeaveRoom}>Leave village</button>
+      </div>
       }
-      <button className={`button ${gamePosition && !gameOver ? 'secondary' : 'primary'}`} onClick={handleLeaveRoom}>Leave village</button>
     </div>
   );
 };

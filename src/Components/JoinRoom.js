@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const OpenRooms = ({ openRooms = [], reconnectRoom, handleJoinRoom, connectError, userName }) => {
+const OpenRooms = ({ openRooms = [], rejoinRoom, handleJoinRoom, connectError, userName }) => {
 
   const [inputRoom, setInputRoom] = useState('');
   const [choosenRoom, setChoosenRoom] = useState('');
@@ -40,8 +40,8 @@ const OpenRooms = ({ openRooms = [], reconnectRoom, handleJoinRoom, connectError
     if (!userName) {
       setValidationError('Please confirm user name');
     } else if (choosenRoom) {
-      const reconnecting = reconnectRoom === choosenRoom;
-      handleJoinRoom(choosenRoom, reconnecting);
+      const rejoining = rejoinRoom === choosenRoom;
+      handleJoinRoom(choosenRoom, rejoining);
       setValidationError('');
       setInputRoom('');
     }
@@ -55,11 +55,11 @@ const OpenRooms = ({ openRooms = [], reconnectRoom, handleJoinRoom, connectError
     </div>
   ))
 
-  const existingRoom = (reconnectRoom &&
-    <div className="room-option" key={reconnectRoom}>
-      <span className="room-span"><span className="room-name">{reconnectRoom}</span></span>
-      <button className="button confirm reconnect" type='submit' onClick={() => handleClick(reconnectRoom)}>Reconnect</button>
-      {validationError && reconnectRoom === choosenRoom && <div className="validation-error">{validationError}</div> }
+  const existingRoom = (rejoinRoom &&
+    <div className="room-option" key={rejoinRoom}>
+      <span className="room-span"><span className="room-name">{rejoinRoom}</span></span>
+      <button className="button confirm reconnect" type='submit' onClick={() => handleClick(rejoinRoom)}>Reconnect</button>
+      {validationError && rejoinRoom === choosenRoom && <div className="validation-error">{validationError}</div> }
     </div>
   )
 

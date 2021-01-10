@@ -40,13 +40,13 @@ export const onNewMessage = (cb) => {
 
 export const onOpenRooms = (cb) => {
   socket.on("open_rooms", rooms => {
-    // console.log(rooms);
+    console.log('open rooms:', rooms);
     cb(rooms);
   });
 }
 
-export const onReconnectRoom = (cb) => {
-  socket.on("reconnect_room", room => {
+export const onRejoinRoom = (cb) => {
+  socket.on("rejoin_room", room => {
     console.log(room);
     cb(room);
   });
@@ -96,5 +96,12 @@ export const onConnectionError = (cb) => {
   })
   socket.on('connect_error', error => {
     cb(error);
+  })
+}
+
+export const onLoginResponse = (cb) => {
+  socket.on('login_response', res => {
+    console.log('login_response', res);
+    cb(res);
   })
 }

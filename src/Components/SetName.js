@@ -6,14 +6,12 @@ const Login = ({ handleSetUserName, userName = '', loginError = '', setLoginErro
   const [confirmed, setConfirmed] = useState(!!userName);
 
   useEffect(() => {
-    if (loginError) {
-      setConfirmed(false);
-      handleSetUserName('');
-    } else if (userName) {
-      setConfirmed(true);
-    }
-  }, [loginError, userName, handleSetUserName]);
+    if (loginError) { setConfirmed(false); }
+  }, [loginError]);
 
+  useEffect(() => {
+    if (userName) { setConfirmed(true); }
+  }, [userName]);
 
   const handleInput = (e) => {
     const input = e.target.value.substr(0, 12);
@@ -23,15 +21,12 @@ const Login = ({ handleSetUserName, userName = '', loginError = '', setLoginErro
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (confirmed) {
-      setConfirmed(false)
-      handleSetUserName('');
-    } else if (inputName) {
-      handleSetUserName(inputName);
-      if (!loginError) {
-        setConfirmed(true);
-      }
+      setConfirmed(false);
+    } else if (inputName && inputName === userName) {
+      setConfirmed(true);
+    } else if (inputName && inputName !== userName) {
+        handleSetUserName(inputName);
     }
   };
 
@@ -45,7 +40,7 @@ const Login = ({ handleSetUserName, userName = '', loginError = '', setLoginErro
         </div>
         :
         <div className="input-body">
-          <span className="input-span"><input value={inputName} placeholder="Enter user name" onChange={(e) => handleInput(e) } /></span>
+          <span className="input-span"><input value={inputName} placeholder="Enter user name" onChange={ e => handleInput(e) } /></span>
           <button className="button confirm" type='submit'>Confirm</button>
           {loginError && <div className="validation-error">{loginError}</div>}
         </div>
