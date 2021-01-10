@@ -1,6 +1,6 @@
 import socketIOClient from "socket.io-client";
 
-console.log(process.env);
+console.log("Environment:" + process.env);
 
 if (process.env.NODE_ENV === 'development' || process.env.REACT_APP_DEBUG === 'true') {
   console.log('Debug on');
