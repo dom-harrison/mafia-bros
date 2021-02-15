@@ -84,7 +84,7 @@ const App = () => {
     const initialUserName = localStorage.getItem('userName');
     const initialUserId = localStorage.getItem('userId');
     if (initialUserName && initialUserId) {
-      emit('login', { userName: initialUserName, userId: initialUserId, reconnect: true });
+      emit('login', { userName: initialUserName, userId: initialUserId });
     }
   }, [])
   
@@ -102,13 +102,13 @@ const App = () => {
 
   useEffect(() => {
     onReconnect(() => {
-      if (userName) {
-        emit('login', { userName, userId, reconnect: true });
-      }
-      if (roomName) {
+      if (userName && roomName) {
         setModalMessage('Reconnecting');
         console.log('Rejoining room:', roomName);
+        emit('login', { userName, userId, reconnect: true });
         emit('join_room', { userName, roomName: roomName, rejoining: true });
+      } else if (userName) {
+        emit('login', { userName, userId });
       }
     })
     onDisconnect(() => {
@@ -145,7 +145,7 @@ const App = () => {
   }
 
   const handleSetUserName = (inputName) => {
-    emit('login', { userName: inputName, userId });
+    emit('login', { userName: inputName, userId, newName: true });
   }
 
   return (

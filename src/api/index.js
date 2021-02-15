@@ -1,6 +1,6 @@
 import socketIOClient from "socket.io-client";
 
-console.log("Environment:" + process.env);
+console.log(process.env);
 
 if (process.env.NODE_ENV === 'development' || process.env.REACT_APP_DEBUG === 'true') {
   console.log('Debug on');
@@ -47,7 +47,7 @@ export const onOpenRooms = (cb) => {
 
 export const onRejoinRoom = (cb) => {
   socket.on("rejoin_room", room => {
-    console.log(room);
+    console.log('rejoin room:', room);
     cb(room);
   });
 }
