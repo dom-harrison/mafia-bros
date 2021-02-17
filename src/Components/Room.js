@@ -12,12 +12,10 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
 
   useEffect(() => {
     const userIndex = roomUsers.findIndex(us => us.userName === userName);
-    const host = userIndex === 0;
     setUser(u => (
       {
       ...u,
       ...roomUsers[userIndex],
-      host
     }));
     if (roomUsers && roomUsers.length < 4 && dayCount === 0) { 
       setUserMessage(`${4 - roomUsers.length} more players needed...`)

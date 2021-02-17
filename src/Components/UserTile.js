@@ -17,7 +17,7 @@ const UserTile = ({ user = {}, selected = false, handleUserClick, you = false, r
         <div className={`user-text${dead ? ' dead' : ''}`}>{userName}</div>
         <div className={`card ${role ? 'known' : 'unknown'}${dead ? ' dead' : ''}`}>
           <div className='front'>
-            <span>{'?'}</span>
+            <span>{user.host ? '🅗' : '?'}</span>
           </div>
           <div className={`back ${role}`}>
             <span className="top">{symbol}</span>
