@@ -89,6 +89,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       key={u.userName} 
       revoteCandidate={revote && revote.users.some(us => us === u.userName)}
       userVotes={votes[u.userName]}
+      opening={dayCount === 0}
     />
   );
 

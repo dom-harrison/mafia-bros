@@ -205,6 +205,8 @@ body {
       border: solid 2px gainsboro;
       border-radius: 5pt;
       color: gainsboro;
+      font-family: CorleoneDue, Arial, Helvetica, sans-serif;
+      font-size: 18px;
       height: 100%;
       left: 0;
       position: absolute;
@@ -213,6 +215,11 @@ body {
 
       span {
         height: 100%;
+      }
+
+      &.host {
+        background: darkgoldenrod;
+        border-color: gainsboro;
       }
     }
 
