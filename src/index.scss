@@ -77,6 +77,7 @@ body {
 .room {
   min-height: calc(100% - 30px);
   padding-bottom: 45px;
+  transition: background 1s ease;
 
   .users {
     display: flex;
@@ -87,6 +88,7 @@ body {
 
   &.night{
     background: #1e2029;
+    
   }
 }
 
@@ -180,8 +182,12 @@ body {
   }
 
   &.dead {
-    opacity: 0.3;
+    opacity: 0.4;
     transition: 1s;
+
+    span {
+      text-decoration: line-through;
+    }
   }
 
   .card {
@@ -211,6 +217,7 @@ body {
       left: 0;
       position: absolute;
       top: 0;
+      transition: background 1s ease;
       width: 100%;
 
       span {
@@ -218,8 +225,7 @@ body {
       }
 
       &.host {
-        background: darkgoldenrod;
-        border-color: gainsboro;
+        background: #1e2029;
       }
     }
 
@@ -279,12 +285,6 @@ body {
     }
   }
 
-  &.dead {      
-    .front, .back {
-      background: dimgray;
-      color: gainsboro;
-    }
-  }
 
   .user-votes {
     z-index: 100;
