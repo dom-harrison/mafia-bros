@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Login = ({ handleSetUserName, userName = '', loginError = '', setLoginError}) => {
+const SetName = ({ handleSetUserName, userName = '', loginError = '', setLoginError}) => {
 
   const [inputName, setInputName] = useState(userName);
   const [confirmed, setConfirmed] = useState(!!userName);
@@ -49,4 +49,4 @@ const Login = ({ handleSetUserName, userName = '', loginError = '', setLoginErro
   );
 };
 
-export default Login;
+export default SetName;

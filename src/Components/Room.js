@@ -9,6 +9,7 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   const [selectedUser, setSelectedUser] = useState(undefined);
   const [userMessage, setUserMessage] = useState('');
   const [user, setUser] = useState({});
+  const [recentClick, setRecentClick] = useState(false);
 
   useEffect(() => {
     const userIndex = roomUsers.findIndex(us => us.userName === userName);
@@ -33,7 +34,8 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
   }, [user, eventStamp]);
 
   const handleUserClick = (target) => {
-    if (dayCount > 0 && 
+    if (!recentClick &&
+      dayCount > 0 && 
       !gameOver &&
       !user.dead &&
       (user.role !== 'villager' || !nightTime) &&
@@ -44,6 +46,8 @@ const Room = ({ userName = '', room = {}, roomUsers = [], handleLeaveRoom, handl
       } else {
       handleAction(target, user.role);
       }
+      setRecentClick(true);
+      setTimeout(() => setRecentClick(false), 2000);
     }
   }
 
