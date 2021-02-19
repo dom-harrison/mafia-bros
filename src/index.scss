@@ -184,10 +184,6 @@ body {
   &.dead {
     opacity: 0.4;
     transition: 0.75s;
-
-    span {
-      text-decoration: line-through;
-    }
   }
 
   .card {
